@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { errorResponse, successResponse } from '../../utils/HttpResponse';
+import { errorResponse, successResponse } from '../../../utils/HttpResponse';
 
 const HealthController = {
   healthCheck(request: Request, response: Response) {
