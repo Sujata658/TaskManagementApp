@@ -24,6 +24,9 @@ export const deleteUser = (id: string) => {
     return UserModel.findByIdAndDelete(id);
 }
 
+export const generateCode = () => {
+  return Math.floor(100000 + Math.random() * 900000);
+}
 
 // export const getMyposts = (id: string) =>{
 //   return PostModel.find({author: id})

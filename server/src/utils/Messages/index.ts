@@ -15,18 +15,18 @@ export const messages = {
       missing_data: 'Please provide email, name or password in message body',
     },
   },
-  post: {
-    creation_success: 'Post Created Successfully',
-    all_get_success: 'Posts Fetched Successfully',
-    one_get_success: 'Post Fetched Successfully',
-    not_found: 'Post With Given Id Not Found',
-    edit_success: 'Post Edited Successfully',
-    delete_success: 'Post Deleted Successfully',
-    edit_forbidden: 'Forbidden To Edit Post',
-    delete_forbidden: 'Forbidden To Delete Post',
+  task: {
+    creation_success: 'Task Created Successfully',
+    all_get_success: 'Tasks Fetched Successfully',
+    one_get_success: 'Task Fetched Successfully',
+    not_found: 'Task With Given Id Not Found',
+    edit_success: 'Task Edited Successfully',
+    delete_success: 'Task Deleted Successfully',
+    edit_forbidden: 'Forbidden To Edit Task',
+    delete_forbidden: 'Forbidden To Delete Task',
     validation: {
       missing_author: 'Please provide author in message body',
-      missing_data: "Either content or title is empty"
+      missing_data: "Either description or title is empty"
     },
   },
   comment: {
@@ -49,9 +49,12 @@ export const messages = {
     refresh_token_expired: 'Refresh Token Expired', 
     not_authorized: 'Not Authorized',
     refresh_success: 'Token Refreshed Successfully',
+    otp_sent: "OTP has been sent",
+    invalid_otp: "OTP is invalid"
   },
   error: {
     internal_server_error: 'Internal Server Error',
+    mail_not_enabled_error: "Please allow less secure apps in your google mail account lol"
   },
   validation:{
     invalid_id: "Id is Invalid",

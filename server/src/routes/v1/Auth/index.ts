@@ -1,11 +1,15 @@
 import { Router } from 'express';
 import AuthController from './controller';
 
-const AuthRouter = Router();
+const auth = Router();
+
+// Signup
+auth.route('/signup').post(AuthController.signup);
 
 // Login
-AuthRouter.route('/login').post(AuthController.login);
+auth.route('/login').post(AuthController.login);
 
-AuthRouter.route('/renewAccessToken').post(AuthController.renewAccessToken);
 
-export default AuthRouter;
+auth.route('/renewAccessToken').post(AuthController.renewAccessToken);
+
+export default auth;

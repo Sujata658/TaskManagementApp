@@ -1,15 +1,34 @@
 import CustomError from '../../../utils/Error';
-import { getUserByEmail } from '../Users/repository';
+import { createUserRepo, generateCode, getUserByEmail } from '../Users/repository';
 import { Auth } from './types';
 import { messages } from '../../../utils/Messages';
 import { signJwt, verifyJwt } from '../../../utils/Jwt';
 import { omit } from '../../../utils';
-import { userPrivateFields } from '../Users/model';
-import InputValidation from '../../../utils/InputValidation';
+import { User, userPrivateFields } from '../Users/model';
+import { sendMail } from '../../../config/sendMail';
+
+
+const unverifiedUsers: Map<string, { userData: User; code: string }> = new Map();
 
 const AuthService = {
+  async signup(data: User) {
+    const user = await getUserByEmail(data.email);
+    if (user) throw new CustomError(messages.user.email_exist, 400);
+
+    const code = generateCode().toString();
+
+    await createUserRepo(data)
+
+    unverifiedUsers.set(data.email, {userData: data, code });
+
+    await sendMail(data.email, 'Verify Email', `Your verification code is ${code}`);
+
+    const { password, ...userData } = data;
+
+    return userData;
+
+  },
   async login(data: Auth) {
-    InputValidation.validateAuth(data);
     const user = await getUserByEmail(data.email);
     if (!user) throw new CustomError(messages.auth.invalid_account, 401);
 
@@ -55,7 +74,9 @@ const AuthService = {
       throw new CustomError(messages.auth.refresh_token_expired, 401);
     }
 
-  }
+  },
+  
 };
 
 export default AuthService;
+export { unverifiedUsers}

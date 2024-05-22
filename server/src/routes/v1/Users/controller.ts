@@ -1,20 +1,32 @@
 import { Response, Request } from 'express';
 import { errorHandler } from '../../../utils/Error/index';
-import { User } from './model';
 import UserService from './service';
 import { successResponse } from '../../../utils/HttpResponse';
 import { messages } from '../../../utils/Messages';
+// import { User } from './model';
 
 const UserController = {
-    async createUser(req: Request<unknown, unknown, User>, res: Response) {
-        try {
-            const body = req.body;
+    // async signup(req: Request<unknown, unknown, User>, res: Response) {
+    //     try {
+    //         const body = req.body;
 
-            const result = await UserService.createUser(body);
+    //         await UserService.sendOtp(body);
+    //         return successResponse({
+    //             response: res,
+    //             message: messages.auth.otp_sent,
+    //         });
+    //     } catch (error) {
+    //         errorHandler(res, error);
+    //     }
+    // },
+    async verifyOtp(req: Request, res: Response) {
+        try {
+            const { email, otp } = req.body;
+            const user = await UserService.verifyOtp(email, otp);
             return successResponse({
                 response: res,
                 message: messages.user.creation_success,
-                data: result,
+                data: user,
             });
         } catch (error) {
             errorHandler(res, error);

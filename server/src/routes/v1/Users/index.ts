@@ -3,8 +3,6 @@ import UserController from "./controller";
 
 const users = Router();
 
-users.post('/signup', UserController.createUser)
-
-users.patch('/:id', UserController.)
+users.post('/verify', UserController.verifyOtp);
 
 export default users;

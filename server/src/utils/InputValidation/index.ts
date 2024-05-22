@@ -1,44 +1,46 @@
 import { Comment } from "routes/v1/Comments/model"
-import { Post } from "routes/v1/Posts/model"
 import { User } from "../../routes/v1/Users/model"
-import CustomError from "../../utils/Error"
+import CustomError  from "../../utils/Error"
 import { messages } from "../../utils/Messages"
 import { Auth } from "routes/v1/Auth/types"
+import { Task } from "routes/v1/Tasks/model"
+
 const InputValidation = {
     validateid(id: string) {
         if (!id) {
             throw new CustomError(messages.validation.param_missing, 400);
         }
-        if(id.length!==24){
+        if (id.length !== 24) {
             throw new CustomError(messages.validation.id_missing, 400)
         }
-        
+
     },
-    async validateUser(user: User) {
+    validateUser(user: User) {
         if (!user.name || !user.email || !user.password) {
             throw new CustomError(messages.user.validation.missing_data, 400);
         }
-
         const isEmailValid = this.validateEmail(user.email);
         if (!isEmailValid) {
             throw new CustomError(messages.validation.invalid_email, 400);
         }
-
         const isPasswordValid = this.validatePassword(user.password);
         if (!isPasswordValid) {
             throw new CustomError(messages.validation.invalid_password, 400);
         }
 
         return true;
+
     },
 
-    validatePost(post: Post) {
-        if (!post.content || !post.title) {
-            throw new CustomError(messages.post.validation.missing_data, 400)
+    validateTask(task: Task) {
+        if (!task.description || !task.title ||  !task.priority || !task.duedate ) {
+            throw new CustomError(messages.task.validation.missing_data, 400)
         }
+
+        
     },
     validateComment(comment: Comment) {
-        if (!comment.content ) {
+        if (!comment.content) {
             throw new CustomError(messages.comment.validation.missing_data, 400)
         }
     },

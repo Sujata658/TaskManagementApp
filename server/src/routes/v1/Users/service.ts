@@ -1,20 +1,45 @@
 import CustomError from '../../../utils/Error';
 import InputValidation from '../../../utils/InputValidation';
-import { User } from './model';
-import { createUserRepo, getAllUsers, getUserByEmail, getUserById,  deleteUser } from './repository';
+// import { User } from './model';
+import { createUserRepo, getAllUsers, getUserByEmail, getUserById,  deleteUser} from './repository';
 import { messages } from '../../../utils/Messages';
+// import {sendMail} from '../../../config/sendMail';
+import { unverifiedUsers } from '../Auth/service';
+
+// const unverifiedUsers: Map<string, { userData: User; code: string }> = new Map();
 
 const UserService = {
-  async createUser(userData: User) {
-    InputValidation.validateUser(userData)
+  // async sendOtp(userData: User) {
+  //   InputValidation.validateUser(userData)
 
-    const user = getUserByEmail(userData.email);
-    if (await user) {
-      throw new CustomError(messages.user.email_exist, 400);
+  //   const user = getUserByEmail(userData.email);
+  //   if (await user) {
+  //     throw new CustomError(messages.user.email_exist, 400);
+  //   }
+
+  //   const code = generateCode().toString();
+
+  //   unverifiedUsers.set(userData.email, { userData, code });
+
+  //   await sendMail(userData.email, 'Verify Email', `Your verification code is ${code}`);
+  // },
+  async verifyOtp(email: string, otp: string) {
+    const record = unverifiedUsers.get(email);
+
+    if (!record) {
+        throw new CustomError(messages.auth.invalid_otp, 400);
     }
 
-    return createUserRepo(userData);
-  },
+    if (record.code !== otp) {
+        throw new CustomError(messages.auth.invalid_otp, 400);
+    }
+
+    const createdUser = await createUserRepo(record.userData);
+
+    unverifiedUsers.delete(email);
+
+    return createdUser;
+},
 
   async getUser(id: string) {
     InputValidation.validateid(id)
@@ -24,6 +49,10 @@ const UserService = {
     }
     return user;
   },
+  async getUserByEmail(email: string) {
+    return getUserByEmail(email);
+  },
+
   getUsers() {
     return getAllUsers();
   },

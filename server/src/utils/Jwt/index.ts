@@ -2,13 +2,13 @@ import logger from '../../config/logger';
 import env from '../../config/env';
 import jwt from 'jsonwebtoken';
 
-export function signJwt(payload: Object, keyName: 'accessToken' | 'refreshToken', options?: jwt.SignOptions) {
+export function signJwt(payload: Object, keyName: 'accessToken' | 'refreshToken' , options?: jwt.SignOptions) {
   const keyValue = keyName === 'accessToken' ? env.accessKeySecret : env.refreshKeySecret;
 
   return jwt.sign(payload, keyValue, { ...(options && options) });
 }
 
-export function verifyJwt(token: string, keyName: 'accessToken' | 'refreshToken', res?: Response): Object | null {
+export function verifyJwt(token: string, keyName: 'accessToken' | 'refreshToken' , res?: Response): Object | null {
   const keyValue = keyName === 'accessToken' ? env.accessKeySecret : env.refreshKeySecret;
 
   try {

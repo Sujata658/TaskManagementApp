@@ -17,9 +17,9 @@ export default class CustomError extends Error {
 }
 
 export const errorHandler = (res: Response, error: unknown) => {
-  logger.error(error);
   if (error instanceof CustomError) {
-    console.log(error.stack);
+    logger.error(`${error.name}: ${error.message}`); // Log short message
+    logger.debug(error.stack); // Log detailed stack trace
     errorResponse({
       response: res,
       message: error.message,
@@ -27,13 +27,15 @@ export const errorHandler = (res: Response, error: unknown) => {
       data: error.errors,
     });
   } else if (error instanceof Error) {
-    console.log(error.stack);
+    logger.error(`Error: ${error.message}`);
+    logger.debug(error.stack); 
     errorResponse({
       response: res,
       message: error.message,
       status: 500,
     });
   } else {
+    logger.error(`Error: ${error}`); 
     errorResponse({
       response: res,
       message: 'Internal Server Error',
