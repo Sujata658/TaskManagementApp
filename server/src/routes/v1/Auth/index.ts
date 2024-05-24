@@ -6,6 +6,7 @@ const auth = Router();
 // Signup
 auth.route('/signup').post(AuthController.signup);
 
+
 // Login
 auth.route('/login').post(AuthController.login);
 

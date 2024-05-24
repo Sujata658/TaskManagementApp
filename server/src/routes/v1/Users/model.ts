@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import CustomError from '../../../utils/Error';
 import { messages } from '../../../utils/Messages';
@@ -14,7 +14,7 @@ export interface User {
 
 export const userPrivateFields = ['password', '__v', 'createdAt', 'updatedAt', 'otp'];
 
-export interface UserDocument extends Document, User {
+export interface UserDocument extends User {
   comparePassword(candidatePassword: string): Promise<boolean>;
   setOtp(code: string): void;
   isOtpValid(code: string): boolean;
@@ -45,15 +45,14 @@ const userSchema = new mongoose.Schema<UserDocument>(
     otp: {
       type: String,
       required: false,
-      
-    },
+    }
   },
   {
     timestamps: true,
   },
 );
 
-userSchema.pre<UserDocument>('save', async function (next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }

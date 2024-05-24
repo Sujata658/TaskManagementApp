@@ -1,24 +1,29 @@
 import { Request, Response } from "express";
 import { Task } from "./model";
-import { errorHandler } from "utils/Error";
-import InputValidation from "utils/InputValidation";
+import { errorHandler } from "../../../utils/Error";
+import InputValidation from "../../../utils/InputValidation";
 import TaskService from "./service";
-import { successResponse } from "utils/HttpResponse";
-import { messages } from "utils/Messages";
+import { successResponse } from "../../../utils/HttpResponse";
+import { messages } from "../../../utils/Messages";
 
 const TasksController = {
     async createTask(req: Request<unknown, unknown, Task>, res: Response) {
         try {
             const task = req.body
+
+            const author = res.locals.user as { _id: string }
+
+            InputValidation.validateid(author._id)
+
             InputValidation.validateTask(task)
 
-            const result = await TaskService.createTask(task)
+            const result = await TaskService.createTask(task, author._id)
 
             return successResponse({
                 response: res,
                 message: messages.task.creation_success,
                 data: result,
-                status: 20
+                status: 200
             })
 
 
@@ -29,8 +34,11 @@ const TasksController = {
     async getTask(req: Request<{ id: string }>, res: Response) {
         try {
             const { id } = req.params
+            const authorId = res.locals.user as { _id: string }
             InputValidation.validateid(id)
-            const result = await TaskService.getTask(id)
+            InputValidation.validateid(authorId._id)
+
+            const result = await TaskService.getTask(id, authorId._id)
 
             return successResponse({
                 response: res,
@@ -44,7 +52,8 @@ const TasksController = {
     },
     async getTasks(req: Request, res: Response) {
         try {
-            const result = await TaskService.getTasks()
+            const authorId = res.locals.user as { _id: string }
+            const result = await TaskService.getTasks(authorId._id)
             return successResponse({
                 response: res,
                 message: messages.task.all_get_success,
@@ -58,11 +67,12 @@ const TasksController = {
     async updateTask(req: Request<{ id: string }, unknown, Partial<Task>>, res: Response) {
         try {
             const { id } = req.params
+            const author = res.locals.user as { _id: string }
 
             const data = req.body
             InputValidation.validateid(id)
 
-            const result = await TaskService.updateTask(id, data)
+            const result = await TaskService.updateTask(id,author._id, data)
 
             return successResponse({
                 response: res,
@@ -80,7 +90,9 @@ const TasksController = {
             const {id } = req.params
             InputValidation.validateid(id);
 
-            await TaskService.deleteTask(id)
+            const author = res.locals.user as { _id: string }
+
+            await TaskService.deleteTask(id, author._id)
 
             return successResponse({
                 response: res,
@@ -88,7 +100,7 @@ const TasksController = {
                 status: 200,
               });
         } catch (error) {
-
+            errorHandler(res, error)
         }
 
 

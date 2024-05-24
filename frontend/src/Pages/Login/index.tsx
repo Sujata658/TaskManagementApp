@@ -1,22 +1,22 @@
 import AuthForm from "@/Components/Auth";
-import loginanimation from "@/assets/loginanimation.json";
-import Lottie from "lottie-react";
+import login from "../../assets/login-removebg-preview.png";
 
 export const Login = () => {
   return (
-    <div className="flex bg-primary h-screen items-center justify-center">
-      <div className="flex bg-white shadow-lg rounded-lg m-32 w-full">
-        <div className="flex-1 flex items-center justify-center p-16 h-full">
-          <Lottie animationData={loginanimation} loop={true} className="h-[60vh]"/>
+    <div className="h-screen p-4 flex">
+      <div className="flex-1 flex flex-col justify-center items-center text-center">
+        <div className="text-4xl mt-4 font-bold mb-4">
+          Welcome Back
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center">
-          
-          <AuthForm
-            onSubmit={function (data: { email: string; password: string; confirmPassword?: string | undefined }): void {
-              console.log(data)
-            }}
-          />
+        <div className="text-gray-600 mb-4">
+          Don't have an account? <a href="/register" className="underline text-black">Sign Up</a>
         </div>
+        <AuthForm onSubmit={function (data: { email: string; password: string; confirmPassword?: string | undefined; }): void {
+          throw new Error("Function not implemented.");
+        }} />
+      </div>
+      <div className="flex-1 bg-slate-200 flex items-center justify-center rounded-lg">
+        <img src={login} alt="login"/>
       </div>
     </div>
   );

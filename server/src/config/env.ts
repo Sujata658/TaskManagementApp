@@ -8,4 +8,11 @@ export default {
   mongoDbConnectionUrl: process.env.MONGO_URL,
   accessKeySecret: process.env.ACCESS_KEY || 'access',
   refreshKeySecret: process.env.REFRESH_KEY || 'refresh',
+
+  mail: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
+  },
+
+  baseUrl: process.env.BASE_URL || 'http://localhost:5000/',
 };

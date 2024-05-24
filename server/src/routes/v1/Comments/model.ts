@@ -1,11 +1,11 @@
 import mongoose, {  Types } from 'mongoose';
 
 export interface Comment {
-  content: String;
+  content: string;
   author: Types.ObjectId;
-  activities: [];
 }
-const CommentSchema = new mongoose.Schema<Comment>(
+
+const commentSchema = new mongoose.Schema<Comment>(
   {
     content: {
       type: String,
@@ -18,17 +18,10 @@ const CommentSchema = new mongoose.Schema<Comment>(
       required: [true, 'Author is Required'],
       unique: false,
     },
-    activities: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'activity',
-        required: false,
-      },
-    ],
   },
   {
     timestamps: true,
   },
 );
 
-export const CommentModel = mongoose.model<Comment>('Comment', CommentSchema);
+export const CommentModel = mongoose.model<Comment>('comment', commentSchema);

@@ -1,8 +1,8 @@
 import { Router } from "express";
 import UserController from "./controller";
 
-const users = Router();
+const UserRouter = Router({mergeParams: true});
 
-users.post('/verify', UserController.verifyOtp);
+UserRouter.post('/verify/:otp/:email', UserController.verifyOtp);
 
-export default users;
+export default UserRouter;

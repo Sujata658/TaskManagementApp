@@ -11,6 +11,8 @@ export const messages = {
     delete_forbidden: 'Forbidden To Delete User',
     my_posts_found: "Found all my posts",
     update_success: "User Updated Successfully",
+    user_verified: "User Verified Successfully",
+    verification_failed: "User Verification Failed",
     validation: {
       missing_data: 'Please provide email, name or password in message body',
     },
@@ -19,7 +21,7 @@ export const messages = {
     creation_success: 'Task Created Successfully',
     all_get_success: 'Tasks Fetched Successfully',
     one_get_success: 'Task Fetched Successfully',
-    not_found: 'Task With Given Id Not Found',
+    not_found: 'Task Not Found',
     edit_success: 'Task Edited Successfully',
     delete_success: 'Task Deleted Successfully',
     edit_forbidden: 'Forbidden To Edit Task',
@@ -38,6 +40,7 @@ export const messages = {
     delete_success: 'Comment Deleted Successfully',
     edit_forbidden: 'Forbidden To Edit Comment',
     delete_forbidden: 'Forbidden To Delete Comment',
+    creation_failed: 'Failed to create comment',
     validation: {
       missing_data: 'Data missing',
     },
@@ -50,7 +53,9 @@ export const messages = {
     not_authorized: 'Not Authorized',
     refresh_success: 'Token Refreshed Successfully',
     otp_sent: "OTP has been sent",
+    otp_expired: "OTP has expired",
     invalid_otp: "OTP is invalid"
+    
   },
   error: {
     internal_server_error: 'Internal Server Error',
@@ -62,5 +67,17 @@ export const messages = {
     param_missing: "Missing parameter",
     invalid_email: "Email is Invalid",
     invalid_password: "Password is invalid"
+  },
+  tag: {
+    creation_success : "Tag Created Successfully",
+    creation_failed : "Failed to create tag",
+    not_found: "Tag not found",
+    tags_found: "Tags found",
+    tasks_found: "Tasks found",
+    validation: {
+      missing_name: "Tag name is missing",
+      missing_task: "Task id is missing",
+
+    }
   }
 };

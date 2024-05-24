@@ -6,9 +6,7 @@ import { signJwt, verifyJwt } from '../../../utils/Jwt';
 import { omit } from '../../../utils';
 import { User, userPrivateFields } from '../Users/model';
 import { sendMail } from '../../../config/sendMail';
-
-
-const unverifiedUsers: Map<string, { userData: User; code: string }> = new Map();
+import env from '../../../config/env';
 
 const AuthService = {
   async signup(data: User) {
@@ -17,12 +15,11 @@ const AuthService = {
 
     const code = generateCode().toString();
 
-    await createUserRepo(data)
+    const url = env.baseUrl + '/verify/' + code + '/' + data.email;
 
-    unverifiedUsers.set(data.email, {userData: data, code });
+    await sendMail(data.email, 'Verify Email', `Please click on the link to verify your email: ${url}`);
 
-    await sendMail(data.email, 'Verify Email', `Your verification code is ${code}`);
-
+    await createUserRepo(data, code)
     const { password, ...userData } = data;
 
     return userData;
@@ -30,10 +27,11 @@ const AuthService = {
   },
   async login(data: Auth) {
     const user = await getUserByEmail(data.email);
-    if (!user) throw new CustomError(messages.auth.invalid_account, 401);
+    if (!user) throw new CustomError(messages.user.not_found, 404);
 
     const isValid = await user.comparePassword(data.password);
     if (!isValid) throw new CustomError(messages.auth.invalid_account, 401);
+
 
     const accessToken = signJwt(omit(user.toJSON(), userPrivateFields), 'accessToken', { expiresIn: '3d' });
     const refreshToken = signJwt({ userId: user._id?.toString() }, 'refreshToken', { expiresIn: '30d' });
@@ -75,8 +73,7 @@ const AuthService = {
     }
 
   },
-  
+
 };
 
 export default AuthService;
-export { unverifiedUsers}

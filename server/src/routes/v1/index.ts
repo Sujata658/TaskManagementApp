@@ -1,19 +1,17 @@
 import { Router } from 'express';
 
 import Health from './Health';
-import users from './Users';
 import auth from './Auth';
+import TaskRouter from './Tasks';
+import UserRouter from './Users';
+import CommentsRouter from './Comments';
 
 const router = Router();
 router.use('/health', Health);
 
 router.use('/auth', auth)
-router.use('/users', users);
-
-/**
- * Import and add your routes here
- * Eg:
- *   router.use('/[route-name]', [Route]);
- */
+router.use('/users', UserRouter);
+router.use('/tasks/:taskId/comments', CommentsRouter)
+router.use('/tasks', TaskRouter)
 
 export default router;

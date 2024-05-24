@@ -1,8 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 export interface Tag {
     name: string;
+    tasks: Types.ObjectId[];
 }
+
 
 const TagSchema = new mongoose.Schema<Tag>(
     {
@@ -10,7 +12,15 @@ const TagSchema = new mongoose.Schema<Tag>(
             type: String,
             required: [true, 'Title is Required'],
             unique: false,
+            trim: true,
         },
+        tasks: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'task',
+                required: false,
+            },
+        ],
     },
     {
         timestamps: true,

@@ -1,46 +1,29 @@
 import CustomError from '../../../utils/Error';
 import InputValidation from '../../../utils/InputValidation';
 // import { User } from './model';
-import { createUserRepo, getAllUsers, getUserByEmail, getUserById,  deleteUser} from './repository';
+import { getAllUsers, getUserByEmail, getUserById, deleteUser, updateVerified } from './repository';
 import { messages } from '../../../utils/Messages';
 // import {sendMail} from '../../../config/sendMail';
-import { unverifiedUsers } from '../Auth/service';
 
-// const unverifiedUsers: Map<string, { userData: User; code: string }> = new Map();
 
 const UserService = {
-  // async sendOtp(userData: User) {
-  //   InputValidation.validateUser(userData)
-
-  //   const user = getUserByEmail(userData.email);
-  //   if (await user) {
-  //     throw new CustomError(messages.user.email_exist, 400);
-  //   }
-
-  //   const code = generateCode().toString();
-
-  //   unverifiedUsers.set(userData.email, { userData, code });
-
-  //   await sendMail(userData.email, 'Verify Email', `Your verification code is ${code}`);
-  // },
-  async verifyOtp(email: string, otp: string) {
-    const record = unverifiedUsers.get(email);
-
+  async verifyOtp(email: string, code: string) {
+    const record = await UserService.getUserByEmail(email);
+    console.log(record)
     if (!record) {
-        throw new CustomError(messages.auth.invalid_otp, 400);
+      throw new CustomError(messages.user.not_found, 400);
     }
 
-    if (record.code !== otp) {
-        throw new CustomError(messages.auth.invalid_otp, 400);
+    if (record.otp !== code) {
+      throw new CustomError(messages.auth.invalid_otp, 400);
     }
 
-    const createdUser = await createUserRepo(record.userData);
+    const result = await updateVerified(record._id.toString(), true);
+    if(!result) throw new CustomError(messages.user.verification_failed, 404);
 
-    unverifiedUsers.delete(email);
-
-    return createdUser;
-},
-
+    const { password, otp, ...user } = result.toObject();
+    return user;
+  },
   async getUser(id: string) {
     InputValidation.validateid(id)
     const user = await getUserById(id);

@@ -13,7 +13,8 @@ export const sendMail = async (email: string, subject: string, text: string) => 
         InputValidation.validateEmail(email)
 
         const transporter = nodeMailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
                 user: process.env.EMAIL,
                 pass: process.env.PASSWORD,

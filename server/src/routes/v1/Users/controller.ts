@@ -5,6 +5,8 @@ import { successResponse } from '../../../utils/HttpResponse';
 import { messages } from '../../../utils/Messages';
 // import { User } from './model';
 
+
+
 const UserController = {
     // async signup(req: Request<unknown, unknown, User>, res: Response) {
     //     try {
@@ -19,19 +21,20 @@ const UserController = {
     //         errorHandler(res, error);
     //     }
     // },
-    async verifyOtp(req: Request, res: Response) {
+    async verifyOtp(req: Request<{otp: string , email:string}>, res: Response) {
         try {
-            const { email, otp } = req.body;
-            const user = await UserService.verifyOtp(email, otp);
+            const { otp, email } = req.params; 
+            const user = await UserService.verifyOtp(email, otp); 
             return successResponse({
                 response: res,
-                message: messages.user.creation_success,
+                message: messages.user.user_verified,
                 data: user,
             });
         } catch (error) {
             errorHandler(res, error);
         }
     },
+    
     async getUser(req: Request<{ id: string }>, res: Response) {
         try {
             const { id } = req.params;

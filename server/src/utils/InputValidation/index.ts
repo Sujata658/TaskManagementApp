@@ -1,9 +1,10 @@
 import { Comment } from "routes/v1/Comments/model"
 import { User } from "../../routes/v1/Users/model"
-import CustomError  from "../../utils/Error"
+import CustomError from "../../utils/Error"
 import { messages } from "../../utils/Messages"
 import { Auth } from "routes/v1/Auth/types"
 import { Task } from "routes/v1/Tasks/model"
+import { Tag } from "routes/v1/trash/Tags/model"
 
 const InputValidation = {
     validateid(id: string) {
@@ -33,11 +34,9 @@ const InputValidation = {
     },
 
     validateTask(task: Task) {
-        if (!task.description || !task.title ||  !task.priority || !task.duedate ) {
+        if (!task.description || !task.title) {
             throw new CustomError(messages.task.validation.missing_data, 400)
         }
-
-        
     },
     validateComment(comment: Comment) {
         if (!comment.content) {
@@ -74,6 +73,15 @@ const InputValidation = {
         }
 
         return true;
+    },
+    validateTag(tag: Tag) {
+        if (!tag.name) {
+            throw new CustomError(messages.tag.validation.missing_name, 400)
+        }
+        if(!tag.tasks){
+            throw new CustomError(messages.tag.validation.missing_task, 400)
+        }
+        return true
     }
 }
 

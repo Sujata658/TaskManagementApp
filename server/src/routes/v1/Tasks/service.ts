@@ -1,40 +1,41 @@
-import CustomError from "utils/Error";
+import CustomError from "../../../utils/Error";
 import { Task } from "./model";
-import { createTask, getTask, getTasks, updateTask, deleteTask } from "./repository";
-import { messages } from "utils/Messages";
+import { createTask, getTask, getTasks, updateTask, deleteTask, getTaskById } from "./repository";
+import { messages } from "../../../utils/Messages";
 
 const TaskService = {
-    createTask(task: Task) {
-        return createTask(task)
+    createTask(task: Task, authorId: string) {
+        return createTask(task, authorId)
     },
-    async getTask(id: string) {
-        const task = await getTask(id)
-        if (!task) throw new CustomError(messages.task.not_found, 404)
+    async getTask(id: string, authorId: string) {
+        const checkifTaskExists = await getTaskById(id)
+        if (!checkifTaskExists) throw new CustomError(messages.task.not_found, 404)
+
+        const task = await getTask(id, authorId)
+        if (!task) throw new CustomError(messages.auth.not_authorized, 404)
         return task
     },
-    async getTasks() {
-        const tasks = await getTasks()
+    async getTasks(authorId: string) {
+        const tasks = await getTasks(authorId)
         if (!tasks) throw new CustomError(messages.task.not_found, 404)
         return tasks
     },
-    async updateTask(id: string, data: Partial<Task>) {
-
-
-        const task = await getTask(id)
-
+    async updateTask(id: string,userId: string, data: Partial<Task>) {
+        const task = await getTaskById(id)
         if (!task) throw new CustomError(messages.task.not_found, 404)
 
-        const res = await updateTask(id, data);
+        const res = await updateTask(id,userId, data);
         if (!res) throw new CustomError(messages.task.edit_forbidden, 403);
 
         return res
 
     },
-    async deleteTask(id: string) {
-        const task = await getTask(id);
+    async deleteTask(id: string, userId: string) {
+        const task = await getTaskById(id);
+        console.log(!task)
         if (!task) throw new CustomError(messages.task.not_found, 404);
 
-        const result = await deleteTask(id);
+        const result = await deleteTask(id, userId);
 
         if (result.deletedCount === 0) {
             throw new CustomError(messages.task.delete_forbidden, 403);

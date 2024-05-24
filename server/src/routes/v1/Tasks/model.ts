@@ -1,19 +1,20 @@
-import mongoose, { Document, Types } from 'mongoose';
+import { priority } from '../../../enums/priority';
+import mongoose, { Types } from 'mongoose';
 
 export interface Task {
   title: string;
   description: string;
   duedate: Date;
-  priority: string;
-  // author: Types.ObjectId;
+  priority: priority;
+  author: Types.ObjectId;
   // activities: [];
   // stage: Types.ObjectId;
 }
 
-export interface TaskDocument extends Document, Task {
+export interface TaskDocument extends Task {
   // tags?: [];
-  // comments?: [];
-  // assignees?: [];
+  comments?: [];
+  assignees?: [];
 }
 
 const TaskSchema = new mongoose.Schema<TaskDocument>(
@@ -22,6 +23,7 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
       type: String,
       required: [true, 'Title is Required'],
       unique: false,
+      trim: true
     },
     description: {
       type: String,
@@ -32,31 +34,19 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
       type: Date,
       required: [true, 'Due date is required'],
       unique: false,
+      default: Date.now() + 24 * 60 * 60 * 1000
     },
     priority: {
-      type: String,
-      required: false,
-      default: 'normal'
+      type: Number,
+      required: [true, 'Priority for task is Required'],
+      default: priority.normal
     },
-    // author: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'user',
-    //   required: [true, 'Author is Required'],
-    //   unique: false,
-    // },
-    // stage: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'stage',
-    //   required: [true, 'Stage is Required'],
-    //   unique: false,
-    // },
-    // comments: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'comment',
-    //     required: false,
-    //   },
-    // ],
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+      required: [true, 'Author is Required'],
+      unique: false,
+    },
     // tags: [
     //   {
     //     type: mongoose.Schema.Types.ObjectId,
@@ -64,18 +54,31 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
     //     required: false,
     //   },
     // ],
+    assignees: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        required: false,
+      },
+    ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'comment',
+        required: false,
+      },
+    ],
+    // stage: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'stage',
+    //   required: [true, 'Stage is Required'],
+    //   unique: false,
+    // },
     // activities: [
     //   {
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'activity',
     //     required: true
-    //   },
-    // ],
-    // assignees: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'user',
-    //     required: false,
     //   },
     // ],
   },
