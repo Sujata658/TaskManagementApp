@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Auth } from './types';
 import { successResponse } from '../../../utils/HttpResponse';
 import { messages } from '../../../utils/Messages';
@@ -8,7 +8,7 @@ import { User } from '../Users/model';
 import InputValidation from '../../../utils/InputValidation';
 
 const AuthController = {
-  async signup(req: Request<unknown, unknown, User>, res: Response) {
+  async signup(req: Request<unknown, unknown, User>, res: Response, next: NextFunction) {
     try {
       const body = req.body;
 
@@ -21,12 +21,12 @@ const AuthController = {
         data: result,
       });
     } catch (error) {
-      errorHandler(res, error);
+      next(errorHandler(res, error))
     }
   },
 
 
-  async login(req: Request<unknown, unknown, Auth>, res: Response) {
+  async login(req: Request<unknown, unknown, Auth>, res: Response, next: NextFunction) {
     try {
       const body = req.body;
 
@@ -34,15 +34,18 @@ const AuthController = {
       const result = await AuthService.login(body);
       return successResponse({
         status: 200,
-        response: res,
-        message: messages.auth.login_success,
-        data: result,
+        response: res.cookie('accessToken', result.accessToken, {
+          secure: true
+        }).cookie('refreshToken', result.refreshToken, {
+          secure: true
+        }),
+        message: messages.auth.login_success
       });
     } catch (error) {
-      errorHandler(res, error);
+      next(errorHandler(res, error))
     }
   },
-  async renewAccessToken(req: Request<{ token: string }>, res: Response) {
+  async renewAccessToken(req: Request<{ token: string }>, res: Response, next: NextFunction) {
     try {
       const refreshToken = req.body.token;
 
@@ -54,7 +57,7 @@ const AuthController = {
         data: result,
       });
     } catch (error) {
-      errorHandler(res, error);
+      next(errorHandler(res, error))
     }
   }
 };

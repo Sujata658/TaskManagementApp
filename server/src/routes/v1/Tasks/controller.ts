@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Task } from "./model";
 import { errorHandler } from "../../../utils/Error";
 import InputValidation from "../../../utils/InputValidation";
@@ -7,7 +7,7 @@ import { successResponse } from "../../../utils/HttpResponse";
 import { messages } from "../../../utils/Messages";
 
 const TasksController = {
-    async createTask(req: Request<unknown, unknown, Task>, res: Response) {
+    async createTask(req: Request<unknown, unknown, Task>, res: Response,  next:NextFunction) {
         try {
             const task = req.body
 
@@ -28,10 +28,10 @@ const TasksController = {
 
 
         } catch (error) {
-            errorHandler(res, error)
+            next(errorHandler(res, error))
         }
     },
-    async getTask(req: Request<{ id: string }>, res: Response) {
+    async getTask(req: Request<{ id: string }>, res: Response, next:NextFunction) {
         try {
             const { id } = req.params
             const authorId = res.locals.user as { _id: string }
@@ -47,10 +47,10 @@ const TasksController = {
                 data: result
             })
         } catch (error) {
-            errorHandler(res, error)
+            next(errorHandler(res, error))
         }
     },
-    async getTasks(req: Request, res: Response) {
+    async getTasks(req: Request, res: Response, next:NextFunction) {
         try {
             const authorId = res.locals.user as { _id: string }
             const result = await TaskService.getTasks(authorId._id)
@@ -60,11 +60,11 @@ const TasksController = {
                 data: result
             })
         } catch (error) {
-            errorHandler(res, error)
+            next(errorHandler(res, error))
         }
 
     },
-    async updateTask(req: Request<{ id: string }, unknown, Partial<Task>>, res: Response) {
+    async updateTask(req: Request<{ id: string }, unknown, Partial<Task>>, res: Response, next:NextFunction) {
         try {
             const { id } = req.params
             const author = res.locals.user as { _id: string }
@@ -82,10 +82,10 @@ const TasksController = {
             });
 
         } catch (error) {
-            errorHandler(res, error)
+            next(errorHandler(res, error))
         }
     },
-    async deleteTask(req: Request<{ id: string }>, res: Response) {
+    async deleteTask(req: Request<{ id: string }>, res: Response, next:NextFunction) {
         try {
             const {id } = req.params
             InputValidation.validateid(id);
@@ -100,7 +100,7 @@ const TasksController = {
                 status: 200,
               });
         } catch (error) {
-            errorHandler(res, error)
+            next(errorHandler(res, error))
         }
 
 

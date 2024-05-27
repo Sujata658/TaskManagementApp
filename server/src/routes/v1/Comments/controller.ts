@@ -1,5 +1,5 @@
 import  { errorHandler } from '../../../utils/Error/index';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { CommentsService } from './service';
 import { Comment } from './model';
 import { successResponse } from '../../../utils/HttpResponse';
@@ -7,7 +7,7 @@ import { messages } from '../../../utils/Messages';
 // import InputValidation from 'utils/InputValidation';
 
 const CommentsController = {
-  async createComment(req: Request<{taskId: string}, unknown, Comment>, res: Response) {
+  async createComment(req: Request<{taskId: string}, unknown, Comment>, res: Response, next: NextFunction) {
     try {
       const { taskId } = req.params;
 
@@ -25,11 +25,11 @@ const CommentsController = {
         status: 201,
       });
     } catch (error) {
-      errorHandler(res, error);
+      next(errorHandler(res, error))
     }
   },
 
-  async updateComment(req: Request<{taskId:string , id: string}, unknown, Partial<Comment>>, res: Response) {
+  async updateComment(req: Request<{taskId:string , id: string}, unknown, Partial<Comment>>, res: Response, next: NextFunction) {
     try {
       const {taskId, id} = req.params
 
@@ -47,11 +47,11 @@ const CommentsController = {
 
 
     } catch (error) {
-      errorHandler(res, error);
+      next(errorHandler(res, error))
     }
   },
 
-  async deleteComment(req: Request<{taskId: string, id:string}>, res: Response) {
+  async deleteComment(req: Request<{taskId: string, id:string}>, res: Response, next: NextFunction) {
     try {
       const {taskId, id} = req.params
       const userId = res.locals.user._id as string;
@@ -65,7 +65,7 @@ const CommentsController = {
 
 
     } catch (error) {
-      errorHandler(res, error);
+      next(errorHandler(res, error))
     }
   },
 };

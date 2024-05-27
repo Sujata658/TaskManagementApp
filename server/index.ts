@@ -15,7 +15,7 @@ import { globalErrorHandler } from './src/middleware/globalErrorHandler';
   const app = express();
   app.use(bodyParser.json());
 
-  app.use(cors(env.cors ? { origin: env.cors, optionsSuccessStatus: 200 } : undefined));
+  app.use(cors(env.cors ? { origin: env.cors, optionsSuccessStatus: 200 , credentials: true,exposedHeaders: ['Access-Control-Allow-Credentials']} : undefined));
 
   morgan.token('level', (req: Request, res: Response) => {
     const statusCode = res.statusCode;

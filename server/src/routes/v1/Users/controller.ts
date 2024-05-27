@@ -1,4 +1,4 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { errorHandler } from '../../../utils/Error/index';
 import UserService from './service';
 import { successResponse } from '../../../utils/HttpResponse';
@@ -21,7 +21,7 @@ const UserController = {
     //         errorHandler(res, error);
     //     }
     // },
-    async verifyOtp(req: Request<{otp: string , email:string}>, res: Response) {
+    async verifyOtp(req: Request<{otp: string , email:string}>, res: Response, next: NextFunction) {
         try {
             const { otp, email } = req.params; 
             const user = await UserService.verifyOtp(email, otp); 
@@ -31,11 +31,12 @@ const UserController = {
                 data: user,
             });
         } catch (error) {
-            errorHandler(res, error);
+            next(errorHandler(res, error))
+            
         }
     },
     
-    async getUser(req: Request<{ id: string }>, res: Response) {
+    async getUser(req: Request<{ id: string }>, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
 
@@ -46,10 +47,10 @@ const UserController = {
                 data: result,
             });
         } catch (error) {
-            errorHandler(res, error);
+            next(errorHandler(res, error))
         }
     },
-    async getUsers(req: Request, res: Response) {
+    async getUsers(req: Request, res: Response, next: NextFunction){
         try {
             const result = await UserService.getUsers();
             return successResponse({
@@ -58,10 +59,10 @@ const UserController = {
                 data: result,
             });
         } catch (error) {
-            errorHandler(res, error);
+            next(errorHandler(res, error))
         }
     },
-    async deleteUser(req: Request<{ id: string }>, res: Response) {
+    async deleteUser(req: Request<{ id: string }>, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
 
@@ -71,7 +72,7 @@ const UserController = {
                 message: messages.user.delete_success,
             });
         } catch (error) {
-            errorHandler(res, error);
+            next(errorHandler(res, error))
         }
     },
     // async updateUser(req: Request<{id: string}, unknown, Partial<User> > , res: Response) {

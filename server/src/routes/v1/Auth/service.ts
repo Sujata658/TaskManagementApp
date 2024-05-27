@@ -1,6 +1,6 @@
 import CustomError from '../../../utils/Error';
 import { createUserRepo, generateCode, getUserByEmail } from '../Users/repository';
-import { Auth } from './types';
+import { Auth, RenewedUser } from './types';
 import { messages } from '../../../utils/Messages';
 import { signJwt, verifyJwt } from '../../../utils/Jwt';
 import { omit } from '../../../utils';
@@ -54,14 +54,15 @@ const AuthService = {
 
   async renewAccessToken(token: string) {
     try {
-      const user = await this.verifyToken(token, 'refreshToken')
+      const user = await this.verifyToken(token, 'refreshToken') as RenewedUser;
 
       if (!user) throw new CustomError(messages.auth.refresh_token_expired, 401);
 
 
+
       const accessToken = signJwt({
-        userId:
-          user
+        _id:
+          user.userId
       }, 'accessToken', { expiresIn: '3d' });
 
       return {
