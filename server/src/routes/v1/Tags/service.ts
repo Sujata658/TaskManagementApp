@@ -1,13 +1,13 @@
-import { messages } from "../../../../utils/Messages";
-import CustomError from "../../../../utils/Error";
+import { messages } from "../../../utils/Messages";
+import CustomError from "../../../utils/Error";
 import { createTag,  getTagById, getAllTags, getTasksByTag } from "./repository";
 
 const TagsServices = {
-    createTag(taskId:string, tagName: string){
-        return createTag(taskId, tagName)
+    createTag(tagName: string){
+        return createTag( tagName)
     },
-    getTag(taskId: string){
-        return getTagById(taskId)
+    getTag(tagId: string){
+        return getTagById(tagId)
     },
     getAllTags(){
         return getAllTags()

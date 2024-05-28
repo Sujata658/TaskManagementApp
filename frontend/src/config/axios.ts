@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = "http://localhost:5000/api/v1";
+const baseURL = "https://probable-guacamole-w4vqv94r9j3gj76-5000.app.github.dev/api/v1";
 
 export const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -24,7 +24,7 @@ function getCookie(name: string): string | null {
 
 axiosInstance.interceptors.request.use(
   config => {
-    const token = getCookie('accessToken');
+    const token = localStorage.getItem('accessToken') || getCookie('accessToken');
     if (config.url !== '/auth/login' && token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }

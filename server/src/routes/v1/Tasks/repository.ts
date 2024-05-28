@@ -8,11 +8,22 @@ export const createTask = (task: Task, authorId: string): Promise<TaskDocument> 
 
 
 export const getTask = (id: string, authorId: string): Promise<TaskDocument | null> => {
-    return TaskModel.findOne({
-        _id: id,
-        $or: [{ author: authorId }, { assignees: authorId }],
-    }).populate({ path: 'assignees', select: 'name email' }).populate({ path: 'comments', select: 'content author createdAt' });
+  return TaskModel.findOne({
+    _id: id,
+    $or: [{ author: authorId }, { assignees: authorId }],
+  })
+  .populate({ path: 'assignees', select: 'name email' })
+  .populate({ path: 'comments', select: 'content author createdAt' })
+  .lean()
+  .exec()
+  .then((task: TaskDocument | null) => {
+    if (task) {
+      
+    }
+    return task;
+  });
 }
+
 
 
 export const getTaskById = (id: string)=> {
@@ -21,9 +32,21 @@ export const getTaskById = (id: string)=> {
 
 
 export const getTasks = (authorId: string) => {
-    return TaskModel.find({
-        $or: [{ author: authorId }, { assignees: authorId }],
-    }).sort({ priority: -1, duedate: -1, createdAt: 1 }).populate({ path: 'assignees', select: 'name email' }).populate({ path: 'comments', select: 'content author createdAt' });
+  return TaskModel.find({
+    $or: [{ author: authorId }, { assignees: authorId }],
+})
+.sort({
+  priority: -1,
+  duedate: -1, 
+  createdAt: 1 
+}).populate({
+  path: 'author',
+  select: 'name -_id',
+  options: { lean: true } 
+})
+.populate({ path: 'assignees', select: 'name email' })
+.populate({ path: 'comments', select: 'content author createdAt' })
+;
 }
 
 

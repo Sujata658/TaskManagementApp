@@ -4,9 +4,11 @@ import { Auth, RenewedUser } from './types';
 import { messages } from '../../../utils/Messages';
 import { signJwt, verifyJwt } from '../../../utils/Jwt';
 import { omit } from '../../../utils';
-import { User, userPrivateFields } from '../Users/model';
+import { User} from '../Users/model';
 import { sendMail } from '../../../config/sendMail';
 import env from '../../../config/env';
+
+import { userPrivateFields } from '../Users/model';
 
 const AuthService = {
   async signup(data: User) {
@@ -32,13 +34,14 @@ const AuthService = {
     const isValid = await user.comparePassword(data.password);
     if (!isValid) throw new CustomError(messages.auth.invalid_account, 401);
 
-
     const accessToken = signJwt(omit(user.toJSON(), userPrivateFields), 'accessToken', { expiresIn: '3d' });
     const refreshToken = signJwt({ userId: user._id?.toString() }, 'refreshToken', { expiresIn: '30d' });
-
+    
+    const userToSend = omit(user.toJSON(), userPrivateFields);
     return {
       accessToken,
       refreshToken,
+      user: userToSend
     };
   },
   async refreshToken(token: string) {

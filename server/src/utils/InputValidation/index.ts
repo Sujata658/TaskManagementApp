@@ -4,7 +4,7 @@ import CustomError from "../../utils/Error"
 import { messages } from "../../utils/Messages"
 import { Auth } from "routes/v1/Auth/types"
 import { Task } from "routes/v1/Tasks/model"
-import { Tag } from "routes/v1/trash/Tags/model"
+import { Tag } from "routes/v1/Tags/model"
 
 const InputValidation = {
     validateid(id: string) {

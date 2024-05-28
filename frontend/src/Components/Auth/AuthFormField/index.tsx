@@ -1,7 +1,8 @@
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Control, FieldPath } from "react-hook-form"
-import { z, ZodTypeAny } from "zod"
+import React from "react";
+import { Control, Controller, FieldPath } from "react-hook-form";
+import { z, ZodTypeAny } from "zod";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 interface AuthFormFieldProps<T extends ZodTypeAny> {
   name: FieldPath<z.infer<T>>;
@@ -33,7 +34,6 @@ const AuthFormField = <T extends ZodTypeAny>({
               type={inputType || "text"}
               className="w-full h-[50px] px-4 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               {...field}
-              
             />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}

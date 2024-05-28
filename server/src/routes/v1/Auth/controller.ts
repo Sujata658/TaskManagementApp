@@ -32,14 +32,20 @@ const AuthController = {
 
       InputValidation.validateAuth(body);
       const result = await AuthService.login(body);
+      res.cookie('accessToken', result.accessToken, {
+        secure: true,
+        sameSite: 'none',
+      });
+      res.cookie('refreshToken', result.refreshToken, {
+        secure: true,
+        sameSite: 'none',
+      });
       return successResponse({
         status: 200,
-        response: res.cookie('accessToken', result.accessToken, {
-          secure: true
-        }).cookie('refreshToken', result.refreshToken, {
-          secure: true
-        }),
-        message: messages.auth.login_success
+        response: res
+        ,
+        message: messages.auth.login_success,
+        data: result
       });
     } catch (error) {
       next(errorHandler(res, error))

@@ -1,7 +1,7 @@
-import { Form } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldPath, useForm } from "react-hook-form";
+import React from "react";
+import { useForm, FormProvider, FieldPath } from "react-hook-form";
 import { z, ZodTypeAny } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import AuthFormField from "../AuthFormField";
 import { Button } from "@/components/ui/button";
 
@@ -9,7 +9,7 @@ interface AuthFormProps<T extends ZodTypeAny> {
   schema: T;
   onSubmit: (values: z.infer<T>) => void;
   fields: {
-    name: FieldPath<z.infer<T>>;
+    name: string;
     label: string;
     placeholder: string;
     inputType?: string;
@@ -18,7 +18,7 @@ interface AuthFormProps<T extends ZodTypeAny> {
 }
 
 const AuthForm = <T extends ZodTypeAny>({ schema, onSubmit, fields }: AuthFormProps<T>) => {
-  const form = useForm<z.infer<T>>({
+  const formMethods = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
     defaultValues: fields.reduce((acc, field) => {
       acc[field.name] = "";
@@ -27,25 +27,24 @@ const AuthForm = <T extends ZodTypeAny>({ schema, onSubmit, fields }: AuthFormPr
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <FormProvider {...formMethods}>
+      <form onSubmit={formMethods.handleSubmit(onSubmit)} className="space-y-4">
         {fields.map((field) => (
           <AuthFormField
             key={field.name}
-            name={field.name}
+            name={field.name as FieldPath<z.infer<T>>}
             label={field.label}
             placeholder={field.placeholder}
             inputType={field.inputType}
             description={field.description}
-            formControl={form.control}
+            formControl={formMethods.control}
           />
         ))}
         <div className="flex justify-center items-center">
-
-        <Button type="submit" className="bg-primary rounded-lg hover:bg-red-500 text-lg">Submit</Button>
+          <Button type="submit" className="bg-primary rounded-lg hover:bg-red-500 text-lg">Submit</Button>
         </div>
       </form>
-    </Form>
+    </FormProvider>
   );
 };
 

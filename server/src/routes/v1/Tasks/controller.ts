@@ -10,11 +10,9 @@ const TasksController = {
     async createTask(req: Request<unknown, unknown, Task>, res: Response,  next:NextFunction) {
         try {
             const task = req.body
-
             const author = res.locals.user as { _id: string }
 
             InputValidation.validateid(author._id)
-
             InputValidation.validateTask(task)
 
             const result = await TaskService.createTask(task, author._id)

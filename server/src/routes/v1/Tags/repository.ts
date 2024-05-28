@@ -1,16 +1,15 @@
 import {  TagModel } from "./model";
 
-export const createTag = (taskId: string, tagName: string)=>{
+export const createTag = (tagName: string)=>{
     const newTag = new TagModel({
-        name: tagName,
-        tasks: taskId
+        name: tagName
     })
     return newTag.save()
 
 }
 
-export const getTagById=( taskId: string)=>{
-    return TagModel.find({taskId})
+export const getTagById=( tagId: string)=>{
+    return TagModel.find({tagId})
 }
 
 export const getAllTags=()=>{

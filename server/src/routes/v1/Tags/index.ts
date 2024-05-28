@@ -5,11 +5,11 @@ const TagsRouter = Router({mergeParams: true});
 
 TagsRouter.post('/', TagsController.createTag)
 
-TagsRouter.get('/:taskId', TagsController.getTag)
+TagsRouter.get('/:tagId', TagsController.getTag)
 
 TagsRouter.get('/', TagsController.getAllTags)
 
-TagsRouter.get('/:tagId', TagsController.getTasksByTag)
+TagsRouter.get('/:tag', TagsController.getTasksByTag)
 
 
 export default TagsRouter;

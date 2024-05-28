@@ -1,4 +1,5 @@
 import { priority } from '../../../enums/priority';
+import { status } from '../../../enums/status';
 import mongoose, { Types } from 'mongoose';
 
 export interface Task {
@@ -7,12 +8,14 @@ export interface Task {
   duedate: Date;
   priority: priority;
   author: Types.ObjectId;
-  // activities: [];
-  // stage: Types.ObjectId;
+  color: string;
+  status: status;
 }
 
+
+
 export interface TaskDocument extends Task {
-  // tags?: [];
+  tags?: [];
   comments?: [];
   assignees?: [];
 }
@@ -37,9 +40,10 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
       default: Date.now() + 24 * 60 * 60 * 1000
     },
     priority: {
-      type: Number,
+      type: String,
+      enum: priority,
       required: [true, 'Priority for task is Required'],
-      default: priority.normal
+      default: priority.Normal
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -47,13 +51,18 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
       required: [true, 'Author is Required'],
       unique: false,
     },
-    // tags: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'tag',
-    //     required: false,
-    //   },
-    // ],
+    color: {
+      type: String,
+      required: false,
+      unique: false,
+    },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'tag',
+        required: false,
+      },
+    ],
     assignees: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -68,24 +77,25 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
         required: false,
       },
     ],
-    // stage: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'stage',
-    //   required: [true, 'Stage is Required'],
-    //   unique: false,
-    // },
-    // activities: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'activity',
-    //     required: true
-    //   },
-    // ],
+    status: {
+      type: String,
+      enum: status,
+      required: [true, 'Status for task is Required'],
+      default: status.ToDo
+    },
+    
   },
   {
     timestamps: true,
   },
 );
+TaskSchema.pre<TaskDocument>('save', function(next) {
+  if (!this.color) {
+    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    this.color = randomColor;
+  }
+  next();
+});
 
 
 

@@ -1,12 +1,22 @@
+import { User } from "./User"
+
+export interface Response<T> {
+  status: number
+  message: string
+  data: T
+}
+
+
 export interface TaskProps {
     title: string
     description: string
-    duedate?: string
-    priority?: number
+    dueDate?: string
+    priority?: string
+    color?: string
     assignees?: string[]
-    tags?: string[]  
-    comments?: Comment[]
+    tags?: Tag[] 
 }
+
 
 
 export interface Task {
@@ -14,14 +24,15 @@ export interface Task {
     title: string
     description: string
     duedate: string
-    priority: number
-    author: string
+    priority: string
+    author: Partial<User>
+    color: string
     assignees: Assignee[]
     createdAt: string
     updatedAt: string
     __v: number
     comments: Comment[]
-    tags?: string[]
+    tags: string[]
   }
   
   export interface Assignee {
@@ -35,5 +46,11 @@ export interface Task {
     content: string
     author: string
     createdAt: string
+  }
+
+  export interface Tag{
+    _id: string
+    name: string
+    tasks: string[]
   }
   

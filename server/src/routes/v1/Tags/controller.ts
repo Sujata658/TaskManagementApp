@@ -1,19 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import CustomError, { errorHandler } from "../../../../utils/Error";
-import InputValidation from "../../../../utils/InputValidation";
-import { messages } from "../../../../utils/Messages";
-import { successResponse } from "../../../../utils/HttpResponse";
+import CustomError, { errorHandler } from "../../../utils/Error";
+import InputValidation from "../../../utils/InputValidation";
+import { messages } from "../../../utils/Messages";
+import { successResponse } from "../../../utils/HttpResponse";
 import TagsServices from "./service";
+import { Tag } from "./model";
 
 const TagsController = {
-    async createTag(req: Request<unknown, unknown, { name: string, taskId: string }>, res: Response, next: NextFunction) {
+    async createTag(req: Request<unknown, unknown, Tag>, res: Response, next: NextFunction) {
         try {
-            const { name, taskId } = req.body;
+            const { name } = req.body;
 
-            InputValidation.validateid(taskId)
-
-
-            const result = await TagsServices.createTag(taskId, name)
+            const result = await TagsServices.createTag(name)
 
             if (!result) throw new CustomError(messages.tag.creation_failed, 500)
 
@@ -29,12 +27,12 @@ const TagsController = {
         }
 
     },
-    async getTag(req: Request<{ taskId: string }, unknown, unknown>, res: Response, next: NextFunction) {
+    async getTag(req: Request<{ tagId: string }, unknown, unknown>, res: Response, next: NextFunction) {
         try {
-            const { taskId } = req.params;
-            InputValidation.validateid(taskId)
+            const { tagId } = req.params;
+            InputValidation.validateid(tagId)
 
-            const result = await TagsServices.getTag(taskId);
+            const result = await TagsServices.getTag(tagId);
             if (!result) throw new CustomError(messages.tag.not_found, 404)
             return successResponse({
                 message: messages.tag.creation_success,
@@ -60,12 +58,11 @@ const TagsController = {
     } catch (error) {
         next(errorHandler(res, error))
     }},
-    async getTasksByTag(req: Request<{tagId: string}>, res: Response, next:NextFunction){
+    async getTasksByTag(req: Request<{tag: string}>, res: Response, next:NextFunction){
         try {
-            const {tagId} = req.params
-            InputValidation.validateid(tagId)
+            const {tag} = req.params
 
-            const result = await TagsServices.getTasksByTag(tagId)
+            const result = await TagsServices.getTasksByTag(tag)
             return successResponse(
                 {
                     message: messages.tag.tasks_found,

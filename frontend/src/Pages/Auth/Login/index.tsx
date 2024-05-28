@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import  { useState } from 'react';
 import { z } from "zod";
-import { Link,  useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
 import AuthForm from "../../../Components/Auth/AuthForm";
 import loginImage from "../../../assets/login-removebg-preview.png";
 import { loginapi } from "@/apis/users/login";
 import { AxiosError } from 'axios';
+import { useUser } from '@/context/UserContext';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -12,8 +13,10 @@ const loginSchema = z.object({
 });
 
 export const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+
+  const { setUser } = useUser();
 
   const handleSubmit = async (values: z.infer<typeof loginSchema>) => {
     setError(null);
@@ -22,7 +25,11 @@ export const Login = () => {
       const response = await loginapi(values);
 
       if (response.status === 200) {
-        navigate('/')
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        setUser(response.data.user);
+        navigate('/');
       } else if (response.status === 400) {
         setError('Invalid Email or Password');
       }
@@ -59,4 +66,3 @@ export const Login = () => {
     </div>
   );
 };
-
