@@ -7,11 +7,13 @@ import TagsServices from "./service";
 import { Tag } from "./model";
 
 const TagsController = {
-    async createTag(req: Request<unknown, unknown, Tag>, res: Response, next: NextFunction) {
+    async createTag(req: Request<{taskId: string}, unknown, Tag>, res: Response, next: NextFunction) {
         try {
+            const { taskId } = req.params;
             const { name } = req.body;
+            InputValidation.validateid(taskId)
 
-            const result = await TagsServices.createTag(name)
+            const result = await TagsServices.createTag(name, taskId)
 
             if (!result) throw new CustomError(messages.tag.creation_failed, 500)
 
@@ -58,11 +60,12 @@ const TagsController = {
     } catch (error) {
         next(errorHandler(res, error))
     }},
-    async getTasksByTag(req: Request<{tag: string}>, res: Response, next:NextFunction){
+    async getTasksByTag(req: Request<{query: string}>, res: Response, next:NextFunction){
         try {
-            const {tag} = req.params
+            console.log(req.params.query)
+            const {query} = req.params
 
-            const result = await TagsServices.getTasksByTag(tag)
+            const result = await TagsServices.getTasksByTag(query)
             return successResponse(
                 {
                     message: messages.tag.tasks_found,

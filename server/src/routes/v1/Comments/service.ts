@@ -16,7 +16,6 @@ export const CommentsService = {
   },
 
   async createComment(data: Comment, taskId: string, userId: string) {
-    console.log(taskId)
     InputValidation.validateComment(data)
     const task = await getTaskById(taskId)
     if(!task) throw new CustomError(messages.task.not_found, 404)

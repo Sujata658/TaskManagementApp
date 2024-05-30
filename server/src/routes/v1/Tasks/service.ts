@@ -1,11 +1,11 @@
 import CustomError from "../../../utils/Error";
 import { Task } from "./model";
-import { createTask, getTask, getTasks, updateTask, deleteTask, getTaskById } from "./repository";
+import { createTask, getTask, getTasks, updateTask, deleteTask, getTaskById, getToDoTasks } from "./repository";
 import { messages } from "../../../utils/Messages";
 
 const TaskService = {
-    createTask(task: Task, authorId: string) {
-        return createTask(task, authorId)
+    createTask(task: Task, authorId: string, tags: string[]) {
+        return createTask(task, authorId, tags)
     },
     async getTask(id: string, authorId: string) {
         const checkifTaskExists = await getTaskById(id)
@@ -42,6 +42,12 @@ const TaskService = {
         }
 
         return result;
+    },
+
+    async getToDoTasks(authorId: string, status: string) {
+        const tasks = await getToDoTasks(authorId, status)
+        if (!tasks) throw new CustomError(messages.task.not_found, 404)
+        return tasks
     }
 }
 export default TaskService;

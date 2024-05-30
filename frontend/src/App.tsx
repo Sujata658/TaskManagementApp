@@ -16,38 +16,42 @@ function App() {
   return (
     <div className='font-dmsans'>
       {user ? <>
-      <div className='grid grid-cols-5'>
+        <div className='grid grid-cols-5'>
 
-        <div className='col-span-1'>
-          <HomeSheet />
-        </div>
-        <div className='col-span-4'>
-          <div>
-          <GreetNav />
+          <div className='col-span-1'>
+            <HomeSheet />
           </div>
-          <div>
+          <div className='col-span-4'>
+            <div>
+              <GreetNav />
+            </div>
+            <div>
 
-          <Routes>
-            <Route path="/login" element={<Navigate to="/" />} />
-            <Route path='/signup' element={<Navigate to="/" />} />
-            <Route path='/verify/:otp/:email' element={<Navigate to="/" />} />
+              <Routes>
+                <Route path="/login" element={<Navigate to="/" />} />
+                <Route path='/signup' element={<Navigate to="/" />} />
+                <Route path='/verify/:otp/:email' element={<Navigate to="/" />} />
 
-            <Route path='/' element={<Home />} />
-            <Route path="/activities" element={<Activities />} />
-            <Route path="/board" element={<BoardView />} />
-            <Route path="/list" element={<ListView />} />
-            <Route path='*' element={<div>404</div>} />
-          </Routes>
+                <Route path='/' element={<Home />} />
+                <Route path="/activities" element={<Activities />} />
+                
+
+
+                  <Route path="/board" element={<BoardView />} />
+                  <Route path="/list" element={<ListView />} />
+               
+                <Route path='*' element={<div>404</div>} />
+              </Routes>
+            </div>
+
           </div>
-
         </div>
-      </div>
       </>
         :
         <Routes>
-          <Route path="/login" element={<Login/>} />
-          <Route path='/signup' element={<Signup/>} />
-          <Route path='/verify/:otp/:email' element={<OTP/>} />
+          <Route path="/login" element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/verify/:otp/:email' element={<OTP />} />
           <Route path='*' element={<Navigate to="/login" />} />
         </Routes>
       }

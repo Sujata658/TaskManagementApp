@@ -1,6 +1,6 @@
-import { TaskDocument } from './model';
+import {  Task } from './model';
 
 export interface TaskReturn {
-  tasks: TaskDocument[];
+  tasks: Task[];
   totalTask: number;
 }

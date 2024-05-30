@@ -14,7 +14,8 @@ export interface TaskProps {
     priority?: string
     color?: string
     assignees?: string[]
-    tags?: Tag[] 
+    tags?: Tag[]
+    status?: string
 }
 
 
@@ -26,13 +27,14 @@ export interface Task {
     duedate: string
     priority: string
     author: Partial<User>
-    color: string
+    // color: string
     assignees: Assignee[]
+    status: string
     createdAt: string
     updatedAt: string
     __v: number
     comments: Comment[]
-    tags: string[]
+    tags: Tag[]
   }
   
   export interface Assignee {
@@ -41,16 +43,15 @@ export interface Task {
     email: string
   }
   
+  export interface Tag{
+    _id: string
+    name: string
+  }
+
+
   export interface Comment {
     _id: string
     content: string
     author: string
     createdAt: string
   }
-
-  export interface Tag{
-    _id: string
-    name: string
-    tasks: string[]
-  }
-  

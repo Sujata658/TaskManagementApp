@@ -1,10 +1,19 @@
 import { messages } from "../../../utils/Messages";
 import CustomError from "../../../utils/Error";
-import { createTag,  getTagById, getAllTags, getTasksByTag } from "./repository";
+import { createTag,  getTagById, getAllTags, getTasksByTag, addTagToTask, getTag, addTaskToTag } from "./repository";
+import { getTaskById } from "../Tasks/repository";
 
 const TagsServices = {
-    createTag(tagName: string){
-        return createTag( tagName)
+    async createTag(tagName: string, taskId: string){
+        const task = getTaskById(taskId)
+        if(!task) throw new CustomError(messages.task.not_found, 404)
+
+        const tag = await createTag( tagName, taskId)
+
+        if(!tag) throw new CustomError(messages.tag.creation_failed, 500)
+            
+        await addTagToTask(taskId, tag._id!.toString())
+        return tag
     },
     getTag(tagId: string){
         return getTagById(tagId)
@@ -12,13 +21,27 @@ const TagsServices = {
     getAllTags(){
         return getAllTags()
     },
-    async getTasksByTag(tagId: string){
-        const tag = await getTagById(tagId)
-
-        if(!tag) throw new CustomError(messages.tag.not_found, 404)
-
-        return getTasksByTag(tagId)
+    async getTasksByTag(query: string){
+        return getTasksByTag(query)
+        
+    },
+    async updateNewTags(tags: string[], taskId: string): Promise<string[]> {
+        const tagIds = await Promise.all(tags.map(async (tag) => {
+            const tagId = await getTag(tag);
+            if (!tagId) {
+                const newTag = await createTag(tag, taskId);
+                if (!newTag) throw new CustomError(messages.tag.creation_failed, 500);
+                await addTagToTask(taskId, newTag._id!.toString());
+                return newTag._id!.toString();
+            } else {
+                await addTaskToTag(taskId, tagId._id!.toString());
+                await addTagToTask(taskId, tagId._id!.toString());
+                return tagId._id!.toString();
+            }
+        }));
+        return tagIds;
     }
+    
 
 }
 export default TagsServices;

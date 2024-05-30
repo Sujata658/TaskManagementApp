@@ -7,19 +7,22 @@ import { requireUser } from '../../../middleware/requireUser';
 const TaskRouter = Router();
 
 
-// Get All the posts
+// Get All the tasks
 TaskRouter.route('/').get(requireUser, TasksController.getTasks);
 
-// Get one post
+//Get todo tasks
+TaskRouter.route('/:status').get(requireUser, TasksController.getToDoTasks);
+
+// Get one task
 TaskRouter.route('/:id').get(requireUser, TasksController.getTask);
 
-// Create new post
+// Create new task
 TaskRouter.route('/').post( requireUser,TasksController.createTask);
 
-// Update a post
+// Update a task
 TaskRouter.route('/:id').patch(requireUser, TasksController.updateTask);
 
-// Delete a post
+// Delete a task
 TaskRouter.route('/:id').delete(requireUser, TasksController.deleteTask);
 
 

@@ -1,25 +1,14 @@
-import { getAllTasks } from "@/apis/tasks/getAllTasks";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Task } from "@/types/Task";
-import { useEffect, useState } from "react";
 import moment from "moment";
 import 'tailwindcss/tailwind.css';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { HiRefresh } from "react-icons/hi";
+import { useTask } from "@/context/TaskContext";
+import { Task } from "@/types/Task";
+import { toast, Toaster } from "sonner";
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [refresh, setRefresh] = useState<boolean>(false);
+  const {tasks, refreshTasks} = useTask();
 
-  useEffect(() => {
-    getAllTasks()
-      .then((res) => {
-        setTasks(res.data);
-      })
-      .catch((err) => {
-        throw err;
-      });
-  }, [refresh]);
 
   const formatDueDate = (duedate: string) => {
     const now = moment();
@@ -61,24 +50,26 @@ const Tasks = () => {
   };
 
   const handleRefresh = () => {
-    setRefresh(!refresh)
-  }
+    refreshTasks();
+    toast.success('Tasks refreshed');
+  };
 
   return (
     <>
       <div className="px-8 pb-8">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center h-full mb-6">
           <div className="flex items-center gap-4">
-            <h1 className="text-3xl font-bold mb-6">Tasks</h1>
-            <div onClick={handleRefresh}>{<HiRefresh />}</div>
+            <h1 className="text-3xl font-bold">Tasks</h1>
+            <div onClick={handleRefresh} className="cursor-pointer"><HiRefresh /></div>
           </div>
           <div>
             <a href="/list">View All</a>
           </div>
         </div>
+
         <div className="bg-background shadow-md rounded-lg">
-          <Table className="min-w-full ">
-            <ScrollArea className="w-full h-[50vh]">
+          <div className="overflow-y-auto max-h-[50vh]">
+            <Table className="min-w-full">
               <TableHeader className="bg-secondary">
                 <TableRow>
                   <TableHead className="px-6 py-3 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider">Title</TableHead>
@@ -88,23 +79,28 @@ const Tasks = () => {
                   <TableHead className="px-6 py-3 text-right text-xs font-medium text-secondary-foreground uppercase tracking-wider">Due Date</TableHead>
                 </TableRow>
               </TableHeader>
-
+              
               <TableBody>
-                {tasks.length === 0 ? <TableRow ><TableCell colSpan={4} className="text-center ">No tasks found</TableCell></TableRow> :
-
-                  tasks.map((task) => (
-                    <TableRow key={task._id} className={`bg-[${task.color}] border-b hover:bg-gray-50`}>
-                      <TableCell className="px-6 py-4 text-sm font-medium text-foreground">{task.title}</TableCell>
-                      <TableCell className="px-6 py-4 text-sm text-foreground ">{task.description}</TableCell>
-                      <TableCell className="px-6 py-4 text-sm font-medium text-foreground">{task.author.name}</TableCell>
+                {
+                  !tasks || tasks.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center">No tasks found</TableCell>
+                  </TableRow>
+                ) : (
+                  tasks.map((task: Task) => (
+                    <TableRow key={task._id} className={`bg-background border-b hover:bg-gray-50`}>
+                      <TableCell className="px-6 py-4 text-sm font-medium text-foreground hover:text-foreground">{task.title}</TableCell>
+                      <TableCell className="px-6 py-4 text-sm text-foreground hover:text-foreground">{task.description}</TableCell>
+                      <TableCell className="px-6 py-4 text-sm font-medium text-foreground hover:text-foreground">{task.author.name}</TableCell>
                       <TableCell className={`px-6 py-4 text-sm font-medium ${getPriorityColor(task.priority)}`}>{task.priority}</TableCell>
                       <TableCell className={`px-6 py-4 whitespace-nowrap text-sm text-right ${getDueDateColor(task.duedate)}`}>{formatDueDate(task.duedate)}</TableCell>
                     </TableRow>
-                  ))}
-
+                  ))
+                )}
               </TableBody>
-            </ScrollArea>
-          </Table>
+            </Table>
+            <Toaster/>
+          </div>
         </div>
       </div>
     </>

@@ -16,7 +16,7 @@ const TagSchema = new mongoose.Schema<Tag>(
         tasks: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'task',
+                ref: 'Task',
                 required: false,
             },
         ],

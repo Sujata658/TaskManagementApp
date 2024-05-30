@@ -15,15 +15,15 @@ import { globalErrorHandler } from './src/middleware/globalErrorHandler';
   const app = express();
   app.use(bodyParser.json());
 
-  const corsOptions = {
-    origin: 'https://probable-guacamole-w4vqv94r9j3gj76-5173.app.github.dev',
-    credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  };
+  // const corsOptions = {
+  //   origin: 'https://probable-guacamole-w4vqv94r9j3gj76-5173.app.github.dev',
+  //   credentials: true,
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  // };
 
-  // app.use(cors(env.cors ? { origin: env.cors, optionsSuccessStatus: 200 , credentials: true,exposedHeaders: ['Access-Control-Allow-Credentials']} : undefined));
+  app.use(cors(env.cors ? { origin: env.cors, optionsSuccessStatus: 200 , credentials: true,exposedHeaders: ['Access-Control-Allow-Credentials']} : undefined));
 
-  app.use(cors(corsOptions));
+  // app.use(cors(corsOptions));
 
   morgan.token('level', (req: Request, res: Response) => {
     const statusCode = res.statusCode;

@@ -1,9 +1,9 @@
-import { Task } from "@/types/Task";
+import { Tag } from "@/types/Tag";
 import { axiosInstance } from "../../config/axios";
 
-export const getAllTasks = async (): Promise<Task[]> => {
+export const getAllTags = async (): Promise<Tag[]> => {
   try {
-    const response = await axiosInstance.get("/tasks");
+    const response = await axiosInstance.get("/tasks/i/tags");
     if (response.status !== 200) {
       throw new Error(response.statusText);
     }

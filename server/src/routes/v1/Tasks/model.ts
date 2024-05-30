@@ -5,22 +5,19 @@ import mongoose, { Types } from 'mongoose';
 export interface Task {
   title: string;
   description: string;
-  duedate: Date;
-  priority: priority;
-  author: Types.ObjectId;
-  color: string;
-  status: status;
-}
-
-
-
-export interface TaskDocument extends Task {
+  dueDate?: Date;
+  priority?: priority;
+  author?: Types.ObjectId;
+  assignees?: [];
+  // color: string;
+  status?: status;
   tags?: [];
   comments?: [];
-  assignees?: [];
 }
 
-const TaskSchema = new mongoose.Schema<TaskDocument>(
+
+
+const TaskSchema = new mongoose.Schema<Task>(
   {
     title: {
       type: String,
@@ -33,7 +30,7 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
       required: [true, 'Description is Required'],
       unique: false,
     },
-    duedate: {
+    dueDate: {
       type: Date,
       required: [true, 'Due date is required'],
       unique: false,
@@ -51,15 +48,15 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
       required: [true, 'Author is Required'],
       unique: false,
     },
-    color: {
-      type: String,
-      required: false,
-      unique: false,
-    },
+    // color: {
+    //   type: String,
+    //   required: false,
+    //   unique: false,
+    // },
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'tag',
+        ref: 'Tag',
         required: false,
       },
     ],
@@ -89,14 +86,14 @@ const TaskSchema = new mongoose.Schema<TaskDocument>(
     timestamps: true,
   },
 );
-TaskSchema.pre<TaskDocument>('save', function(next) {
-  if (!this.color) {
-    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    this.color = randomColor;
-  }
-  next();
-});
+// TaskSchema.pre<TaskDocument>('save', function(next) {
+//   if (!this.color) {
+//     const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+//     this.color = randomColor;
+//   }
+//   next();
+// });
 
 
 
-export const TaskModel = mongoose.model<TaskDocument>('Task', TaskSchema);
+export const TaskModel = mongoose.model<Task>('Task', TaskSchema);
