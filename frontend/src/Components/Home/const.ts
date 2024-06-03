@@ -11,6 +11,8 @@ type Overviews = {
     title: string;
     icon: IconType;
     total: number; 
+    link?: string;
+    params?: string;
 };
 
 
@@ -19,12 +21,15 @@ export const overviews: Overviews[] = [
         id: '0',
         title: 'All Tasks',
         icon: LiaBorderAllSolid,
+        link: '/',
         total: 10,
     },
     {
         id: '1',
         title: 'To Do',
         icon: MdOutlineAutoAwesomeMotion,
+        link: '/list',
+        params: 'ToDo',
         total: 10,
     },
     {
@@ -32,11 +37,15 @@ export const overviews: Overviews[] = [
         title: 'In Progress',
         icon: RiProgress5Line,
         total: 10,
+        link: '/list',
+        params: 'InProgress',
     },
     {
         id: '3',
         title: 'Completed',
         icon: IoCheckmarkDoneCircleOutline,
         total: 10,
+        link: '/list',
+        params: 'Completed',
     },
 ];

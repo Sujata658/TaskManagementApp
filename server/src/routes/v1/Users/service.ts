@@ -57,11 +57,14 @@ const UserService = {
   //   return updateUser(id, updateData);
   // },
 
-
-  //   getMyposts(userId: string){
-  //     return getMyposts(userId);
-
-  //   },
+  async logout(id: string) {
+    InputValidation.validateid(id);
+    const user = await getUserById(id);
+    if (!user) {
+      throw new CustomError(messages.user.not_found, 404);
+    }
+    return true
+  }
 };
 
 export default UserService;

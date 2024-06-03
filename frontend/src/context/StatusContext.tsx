@@ -7,14 +7,14 @@ interface StatusContextType {
     ToDOtasks: Task[];
     InProgresstasks: Task[];
     Completedtasks: Task[];
-    refreshTasks: () => void;
+    refreshStatus: () => void;
 }
 
 const StatusContext = createContext<StatusContextType>({
     ToDOtasks: [],
     InProgresstasks: [],
     Completedtasks: [],
-    refreshTasks: () => {}
+    refreshStatus: () => {}
 });
 
 const StatusProvider = ({ children }: { children: ReactNode }) => {
@@ -22,7 +22,7 @@ const StatusProvider = ({ children }: { children: ReactNode }) => {
     const [InProgresstasks, setInProgresstasks] = useState<Task[]>([]);
     const [Completedtasks, setCompletedtasks] = useState<Task[]>([]);
 
-    const refreshTasks = useCallback(() => {
+    const refreshStatus = useCallback(() => {
         Promise.all([
             getStatusTasks('ToDo'),
             getStatusTasks('InProgress'),
@@ -39,11 +39,11 @@ const StatusProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     useEffect(() => {
-        refreshTasks();
-    }, [refreshTasks]);
+        refreshStatus();
+    }, [refreshStatus]);
 
     return (
-        <StatusContext.Provider value={{ ToDOtasks, InProgresstasks, Completedtasks, refreshTasks }}>
+        <StatusContext.Provider value={{ ToDOtasks, InProgresstasks, Completedtasks, refreshStatus }}>
             {children}
         </StatusContext.Provider>
     );

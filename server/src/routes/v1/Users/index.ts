@@ -8,4 +8,6 @@ UserRouter.post('/verify/:otp/:email', UserController.verifyOtp);
 
 UserRouter.get('/', requireUser, UserController.getUsers);
 
+UserRouter.get("/logout", requireUser, UserController.logout);
+
 export default UserRouter;

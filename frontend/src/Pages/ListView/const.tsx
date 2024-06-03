@@ -3,16 +3,18 @@ import { Task, Assignee } from "@/types/Task"
 import { ColumnDef, CellContext, FilterFn } from "@tanstack/react-table"
 import { Tag } from "@/types/Task"
 import moment from "moment"
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown } from "lucide-react"
 
 const filterTags: FilterFn<any> = (row, columnId, filterValue) => {
-  const tags = row.getValue(columnId);
-  if (Array.isArray(tags)) {
-    return tags.some(tag =>
-      tag.name.toLowerCase().includes(filterValue.toLowerCase())
-    );
+  const tags: Tag[] = row.original.tags as Tag[];
+  const res = tags.some((tag) => tag.name.includes(filterValue));
+  if (res) {
+    return true;
   }
   return false;
-};
+
+}
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -39,7 +41,21 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "title",
-    header: "Title",
+    header: ({ column }) => {
+      return (
+        <>
+        Title
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+        </>
+      )
+    },
+
   },
   {
     accessorKey: "status",
@@ -49,15 +65,20 @@ export const columns: ColumnDef<Task>[] = [
     accessorKey: "dueDate",
     header: "Due Date",
     cell: (props: CellContext<Task, unknown>) => {
-      const dueDate = moment(props.cell.row.original.duedate);
+      const dueDate = moment(props.cell.row.original.dueDate);
       const now = moment();
       const hoursLeft = dueDate.diff(now, 'hours');
       const daysLeft = dueDate.diff(now, 'days');
       
       let timeLeft;
-      if (hoursLeft <= 24) {
+      if (hoursLeft <= 0) {
+        timeLeft = "Overdue";
+      } else if (hoursLeft <= 24) {
         timeLeft = `${hoursLeft} hours left`;
-      } else {
+      } else if (daysLeft <= 1) {
+        timeLeft = `${daysLeft} day left`;
+      }
+      else {
         timeLeft = `${daysLeft} days left`;
       }
   
@@ -72,6 +93,7 @@ export const columns: ColumnDef<Task>[] = [
     accessorKey: "priority",
     header: "Priority",
   },
+  
   {
     accessorKey: "author.name",
     header: "Created By",

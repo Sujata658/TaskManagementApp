@@ -21,6 +21,7 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
     const refreshTags = useCallback(() => {
         getAllTags()
             .then((res) => {
+                
                 setTags(res);
             })
             .catch((err) => {

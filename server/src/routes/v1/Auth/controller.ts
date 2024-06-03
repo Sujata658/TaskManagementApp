@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { Auth } from './types';
 import { successResponse } from '../../../utils/HttpResponse';
 import { messages } from '../../../utils/Messages';
-import { errorHandler } from '../../../utils/Error/index';
 import AuthService from './service';
 import { User } from '../Users/model';
 import InputValidation from '../../../utils/InputValidation';
@@ -21,7 +20,7 @@ const AuthController = {
         data: result,
       });
     } catch (error) {
-      next(errorHandler(res, error))
+      next(error)
     }
   },
 
@@ -32,23 +31,14 @@ const AuthController = {
 
       InputValidation.validateAuth(body);
       const result = await AuthService.login(body);
-      res.cookie('accessToken', result.accessToken, {
-        secure: true,
-        sameSite: 'none',
-      });
-      res.cookie('refreshToken', result.refreshToken, {
-        secure: true,
-        sameSite: 'none',
-      });
       return successResponse({
         status: 200,
-        response: res
-        ,
+        response: res,
         message: messages.auth.login_success,
         data: result
       });
     } catch (error) {
-      next(errorHandler(res, error))
+      next(error)
     }
   },
   async renewAccessToken(req: Request<{ token: string }>, res: Response, next: NextFunction) {
@@ -63,7 +53,7 @@ const AuthController = {
         data: result,
       });
     } catch (error) {
-      next(errorHandler(res, error))
+      next(error)
     }
   }
 };

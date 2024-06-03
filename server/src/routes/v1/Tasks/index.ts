@@ -25,5 +25,9 @@ TaskRouter.route('/:id').patch(requireUser, TasksController.updateTask);
 // Delete a task
 TaskRouter.route('/:id').delete(requireUser, TasksController.deleteTask);
 
+//Update task status
+TaskRouter.route('/:id/:from/:to').patch(requireUser, TasksController.updateTaskStatus);
+
+
 
 export default TaskRouter;

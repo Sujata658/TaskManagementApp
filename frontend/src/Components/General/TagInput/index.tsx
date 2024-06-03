@@ -45,7 +45,6 @@ const TagInput: React.FC<TagInputProps> = ({ selectedTags, setSelectedTags }) =>
     }
   }, [inputValue, tags]);
 
-  // Added useEffect to update filteredTags when inputValue changes
   useEffect(() => {
     if (!inputValue) {
       setFilteredTags([]);
@@ -80,7 +79,7 @@ const TagInput: React.FC<TagInputProps> = ({ selectedTags, setSelectedTags }) =>
       )}
       <div className="mt-2 flex flex-wrap gap-2">
         {selectedTags.map((tag) => (
-          <div key={tag} className="flex items-center bg-background rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+          <div key={tag} className="flex items-center bg-background rounded-full px-3 py-1 text-sm font-semibold border ">
             {tag}
             <button
               type="button"

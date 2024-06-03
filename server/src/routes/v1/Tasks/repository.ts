@@ -40,8 +40,7 @@ export const getTasks = (authorId: string) => {
     $or: [{ author: authorId }, { assignees: authorId }],
   })
     .sort({
-      priority: -1,
-      duedate: -1,
+      dueDate: 1,
       createdAt: 1
     }).populate({
       path: 'author',
@@ -108,4 +107,10 @@ export const getToDoTasks = (authorId: string, status: string) => {
     .populate({ path: 'assignees', select: 'name email' })
     .populate({ path: 'comments', select: 'content author createdAt' })
     ;
+}
+
+export const updateTaskStatus = (id: string, userId: string,to : string): Promise<Task | null> => {
+  return TaskModel.findOneAndUpdate({ _id: id, $or: [{ author: userId }, { assignees: userId }],
+  }, {status: to}, { new: true }
+  )
 }

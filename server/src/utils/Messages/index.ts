@@ -3,7 +3,7 @@ export const messages = {
     creation_success: 'User Created Successfully',
     all_get_success: 'Users Fetched Successfully',
     one_get_success: 'User Fetched Successfully',
-    not_found: 'User With Given Id Not Found',
+    not_found: 'User With Given Credentials Not Found',
     email_exist: "Email Already Exist",
     edit_success: 'User Edited Successfully',
     delete_success: 'User Deleted Successfully',
@@ -13,6 +13,7 @@ export const messages = {
     update_success: "User Updated Successfully",
     user_verified: "User Verified Successfully",
     verification_failed: "User Verification Failed",
+    logout_success: "User Logged Out Successfully",
     validation: {
       missing_data: 'Please provide email, name or password in message body',
     },

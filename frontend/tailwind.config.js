@@ -77,7 +77,10 @@ module.exports = {
         "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
       fontFamily:{
-        "dmsans": "'DM Sans', sans-serif"
+        "dmsans": "'DM Sans', sans-serif",
+        "merriweather":"'Merriweather Sans', sans-serif",
+        "arvo": "'Arvo', serif",
+        "geologica":"'Geologica', sans-serif"
       }
     },
   },

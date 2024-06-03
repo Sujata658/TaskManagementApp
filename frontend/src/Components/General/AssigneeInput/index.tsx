@@ -90,7 +90,7 @@ const AssigneeInput: React.FC<AssigneeInputProps> = ({ selectedAssignees, setSel
       )}
       <div className="mt-2 flex flex-wrap gap-2">
         {selectedAssignees.map((assignee) => (
-          <div key={assignee.id} className="flex items-center bg-background rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+          <div key={assignee.id} className="flex items-center bg-background border rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
             {assignee.displayName}
             <button
               type="button"

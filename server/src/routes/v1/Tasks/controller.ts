@@ -14,8 +14,10 @@ const TasksController = {
             const task: Task = {
                 title: taskFields.title,
                 description: taskFields.description,
+                dueDate: taskFields.dueDate,
                 priority: taskFields.priority,
-                assignees: taskFields.assignees
+                assignees: taskFields.assignees,
+                status: taskFields.status,
             };
             
             const author = res.locals.user as { _id: string };
@@ -126,6 +128,33 @@ const TasksController = {
             next(errorHandler(res, error))
         }
 
-    }
+    },
+
+    async updateTaskStatus(req: Request<{ id: string, from: string, to: string }, unknown, unknown>, res: Response, next: NextFunction) {
+        try {
+            const { id, from, to } = req.params
+            const author = res.locals.user as { _id: string }
+
+            InputValidation.validateid(id)
+
+            
+
+            if(!TaskService.checkRule(from, to))
+                throw new Error("Changing status from " + from + " to " + to + " is not allowed")
+
+            const result = await TaskService.updateTaskStatus(id, author._id, to)
+
+            return successResponse({
+                response: res,
+                message: messages.task.edit_success,
+                data: result,
+                status: 200,
+            });
+
+        } catch (error) {
+            next(errorHandler(res, error))
+        }
+    },
+    
 }
 export default TasksController;

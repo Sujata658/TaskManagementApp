@@ -21,10 +21,11 @@ export interface TaskProps {
 
 
 export interface Task {
+    values: any
     _id: string
     title: string
     description: string
-    duedate: string
+    dueDate: string
     priority: string
     author: Partial<User>
     // color: string

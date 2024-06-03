@@ -91,23 +91,26 @@ const UserController = {
     //   }
     // },
 
+    async logout(req: Request, res: Response, next: NextFunction) {
+        try {
+            const authorId = res.locals.user as { _id: string }
+
+            await UserService.logout(authorId._id);
+            return successResponse({
+                response: res,
+                message: messages.user.logout_success
+            });
+        } catch (error) {
+            next(errorHandler(res, error))
+        }
+    },
 
 
 
 
-    //   async getMyposts(req: Request, res: Response){
-    //     const userId = res.locals.user._id
-
-    //     const result = await UserService.getMyposts(userId)
-    //     return successResponse({
-    //       message: messages.user.my_posts_found,
-    //       response: res,
-    //       data:result
-    //     })
 
 
 
-    //   },
 };
 
 export default UserController;

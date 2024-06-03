@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm, FormProvider, FieldPath } from "react-hook-form";
 import { z, ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,7 +40,7 @@ const AuthForm = <T extends ZodTypeAny>({ schema, onSubmit, fields }: AuthFormPr
           />
         ))}
         <div className="flex justify-center items-center">
-          <Button type="submit" className="bg-primary rounded-lg hover:bg-red-500 text-lg">Submit</Button>
+          <Button type="submit" className="bg-secondary rounded-lg hover:bg-primary text-lg">Submit</Button>
         </div>
       </form>
     </FormProvider>

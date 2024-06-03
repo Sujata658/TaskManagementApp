@@ -1,12 +1,11 @@
+import Kanban from "@/Components/BoardView/Kanban"
 
-
-const BoardView
- = () => {
+const Board = () => {
   return (
-    <div>BoardView
-
-    </div>
+    <>
+        <Kanban/>
+    </>
   )
 }
 
-export default BoardView
+export default Board

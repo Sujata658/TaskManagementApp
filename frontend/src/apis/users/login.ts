@@ -11,9 +11,10 @@ export const loginapi = async (loginData: LoginData): Promise<any> => {
     if (response.status !== 200) {
       throw new Error(response.statusText);
     }
+    console.log(response.data.data)
     return response.data;
   } catch (error) {
-    throw error; 
+    throw error;
   }
 };
 
