@@ -26,7 +26,6 @@ const ListView = () => {
     setCompletedtotal(Completedtasks.length);
   }, [ToDOtasks, InProgresstasks, Completedtasks]);
 
-  console.log('ToDOtasks:', ToDOtasks)
 
   return (
     <>

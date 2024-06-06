@@ -21,11 +21,11 @@ const TaskService = {
         if (!tasks) throw new CustomError(messages.task.not_found, 404)
         return tasks
     },
-    async updateTask(id: string,userId: string, data: Partial<Task>) {
+    async updateTask(id: string,userId: string, data: Partial<Task>, tags: string[] | undefined) {
         const task = await getTaskById(id)
         if (!task) throw new CustomError(messages.task.not_found, 404)
 
-        const res = await updateTask(id,userId, data);
+        const res = await updateTask(id,userId, data, tags);
         if (!res) throw new CustomError(messages.task.edit_forbidden, 403);
 
         return res

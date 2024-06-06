@@ -2,20 +2,38 @@ import KanbanColumn from "../KanbanColumn";
 import { useStatus } from "@/context/StatusContext";
 import { Column } from "@/types/KanbanColumn";
 import { DndContext, closestCorners, DragOverlay, DragStartEvent, DragEndEvent } from "@dnd-kit/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Task } from "@/types/Task";
 import { arrayMove } from "@dnd-kit/sortable";
 import { changeStatus } from "@/apis/tasks/changeStatus";
 import { Toaster, toast } from "sonner";
+import { useTask } from "@/context/TaskContext";
 
 const Kanban = () => {
-    const { ToDOtasks, InProgresstasks, Completedtasks } = useStatus();
+    const { ToDOtasks, InProgresstasks, Completedtasks, refreshStatus } = useStatus();
+
+    const [todo, setTodo] = useState<Task[]>(ToDOtasks);
+    const [inprogress, setInprogress] = useState<Task[]>(InProgresstasks);
+    const [completed, setCompleted] = useState<Task[]>(Completedtasks);
+
+
+    const {refreshTasks} = useTask();
+
+    useEffect(() => {
+        refreshStatus();
+    },[])
+
+    useEffect(() => {
+        setTodo(ToDOtasks);
+        setInprogress(InProgresstasks);
+        setCompleted(Completedtasks);
+    }, [ToDOtasks, InProgresstasks, Completedtasks]);
 
     const initialColumns: Column[] = [
-        { id: 'ToDo', title: 'To Do', tasks: ToDOtasks },
-        { id: 'InProgress', title: 'In Progress', tasks: InProgresstasks },
-        { id: 'Completed', title: 'Completed', tasks: Completedtasks },
+        { id: 'ToDo', title: 'To Do', tasks: todo },
+        { id: 'InProgress', title: 'In Progress', tasks: inprogress },
+        { id: 'Completed', title: 'Completed', tasks: completed },
     ];
 
     const [columns, setColumns] = useState<Column[]>(initialColumns);
@@ -35,7 +53,6 @@ const Kanban = () => {
         const [activeColumnId, activeTaskId] = active.id.toString().split(':');
         const [overColumnId, overTaskId] = over.id.toString().split(':');
 
-        // Handling item Sorting within the same column
         if (activeColumnId === overColumnId && activeTaskId !== overTaskId) {
             setColumns((columns) => {
                 const columnIndex = columns.findIndex(column => column.id === activeColumnId);
@@ -54,7 +71,6 @@ const Kanban = () => {
             });
         }
 
-        // Handling item dropping into a different column
         if (activeColumnId !== overColumnId) {
             try {
                 await changeStatus(activeTaskId, activeColumnId, overColumnId);
@@ -81,6 +97,8 @@ const Kanban = () => {
 
                     return updatedColumns;
                 });
+                refreshTasks();
+                refreshStatus();
 
                 toast.success("Task status changed successfully.");
             } catch (error) {

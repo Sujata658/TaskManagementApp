@@ -54,7 +54,8 @@ export const getTasks = (authorId: string) => {
 }
 
 
-export const updateTask = (id: string, userId: string, data: Partial<Task>): Promise<Task | null> => {
+export const updateTask = async (id: string, userId: string, data: Partial<Task>, tags: string[] | undefined): Promise<Task | null> => {
+  await TagsServices.updateTasksTags(tags, id.toString())
   return TaskModel.findOneAndUpdate({ _id: id, author: userId }, data, { new: true }
   )
 }

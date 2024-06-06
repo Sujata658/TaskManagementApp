@@ -74,10 +74,10 @@ const TasksController = {
             const { id } = req.params
             const author = res.locals.user as { _id: string }
 
-            const data = req.body
+            const {tags, ...data} = req.body
             InputValidation.validateid(id)
 
-            const result = await TaskService.updateTask(id, author._id, data)
+            const result = await TaskService.updateTask(id, author._id, data, tags)
 
             return successResponse({
                 response: res,

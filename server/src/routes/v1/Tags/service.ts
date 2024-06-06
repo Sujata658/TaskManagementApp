@@ -25,7 +25,9 @@ const TagsServices = {
         return getTasksByTag(query)
         
     },
-    async updateNewTags(tags: string[], taskId: string): Promise<string[]> {
+    async updateNewTags(tags: string[] | undefined, taskId: string): Promise<string[]> {
+        if (!tags) return []; 
+    
         const tagIds = await Promise.all(tags.map(async (tag) => {
             const tagId = await getTag(tag);
             if (!tagId) {
@@ -40,7 +42,20 @@ const TagsServices = {
             }
         }));
         return tagIds;
+    },
+    async updateTasksTags(tags: string[] | undefined, taskId: string) {
+        if (!tags || tags.length === 0) return;
+        await Promise.all(tags.map(async (tag) => {
+            const tagId = await getTag(tag);
+            if (!tagId) {
+                const newTag = await createTag(tag, taskId);
+                if (!newTag) throw new CustomError(messages.tag.creation_failed, 500);
+                await addTagToTask(taskId, newTag._id!.toString());
+            }
+        }));
+        return
     }
+    
     
 
 }

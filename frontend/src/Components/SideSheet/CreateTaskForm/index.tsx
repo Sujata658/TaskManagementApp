@@ -81,6 +81,7 @@ const CreateTaskForm: React.FC = () => {
         priority: data.priority,
         status: data.status,
       };
+      
       const response = await createTask(taskProps);
       if (response.status === 200) {
         refreshTasks();

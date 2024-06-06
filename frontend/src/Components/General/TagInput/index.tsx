@@ -4,11 +4,16 @@ import { useTag } from "@/context/TagContext";
 
 interface TagInputProps {
   selectedTags: string[];
-  setSelectedTags: (tags: string[]) => void;
+  setSelectedTags: (tags: (string)[]) => void;
+  existingTags?: Partial<Tag>[];
 }
 
-const TagInput: React.FC<TagInputProps> = ({ selectedTags, setSelectedTags }) => {
-  const [inputValue, setInputValue] = useState('');
+const TagInput: React.FC<TagInputProps> = ({
+  selectedTags,
+  setSelectedTags,
+  existingTags = [],
+}) => {
+  const [inputValue, setInputValue] = useState("");
   const [filteredTags, setFilteredTags] = useState<Tag[]>([]);
   const [isInputActive, setIsInputActive] = useState(false);
   const { tags } = useTag();
@@ -19,7 +24,7 @@ const TagInput: React.FC<TagInputProps> = ({ selectedTags, setSelectedTags }) =>
 
   const handleTagClick = (tag: string) => {
     setSelectedTags([...selectedTags, tag]);
-    setInputValue('');
+    setInputValue("");
   };
 
   const handleTagRemove = (tag: string) => {
@@ -27,10 +32,10 @@ const TagInput: React.FC<TagInputProps> = ({ selectedTags, setSelectedTags }) =>
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputValue && !filteredTags.length) {
+    if (e.key === "Enter" && inputValue && !filteredTags.length) {
       if (!selectedTags.includes(inputValue.trim())) {
         setSelectedTags([...selectedTags, inputValue.trim()]);
-        setInputValue('');
+        setInputValue("");
       }
       e.preventDefault();
     }
@@ -50,6 +55,15 @@ const TagInput: React.FC<TagInputProps> = ({ selectedTags, setSelectedTags }) =>
       setFilteredTags([]);
     }
   }, [inputValue]);
+
+  useEffect(() => {
+    if (existingTags.length > 0) {
+      console.log('reached existingTags:', existingTags)
+      const existingTagNames = existingTags.map((tag) => tag?.name).filter(Boolean); 
+      setSelectedTags(existingTagNames as string[]); 
+    }
+}, [existingTags, setSelectedTags]);
+
 
   return (
     <div>
@@ -79,7 +93,10 @@ const TagInput: React.FC<TagInputProps> = ({ selectedTags, setSelectedTags }) =>
       )}
       <div className="mt-2 flex flex-wrap gap-2">
         {selectedTags.map((tag) => (
-          <div key={tag} className="flex items-center bg-background rounded-full px-3 py-1 text-sm font-semibold border ">
+          <div
+            key={tag}
+            className="flex items-center bg-background rounded-full px-3 py-1 text-sm font-semibold border"
+          >
             {tag}
             <button
               type="button"
