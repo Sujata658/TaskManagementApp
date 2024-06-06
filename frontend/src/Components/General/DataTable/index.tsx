@@ -20,14 +20,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
+import { useState } from "react";
+import ViewDetailsDialog from "@/Components/ListView/ViewDetailsDialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Task } from "@/types/Task";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Task, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -37,8 +40,8 @@ export function DataTable<TData, TValue>({
   )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
- 
+  const [rowSelection, setRowSelection] = useState({})
+
   const table = useReactTable({
     data,
     columns,
@@ -57,11 +60,11 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   })
-
+console.log('Datatable:',table.getRowModel().rows)
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-      <Input
+      <div className="flex items-center py-4 px-1">
+        <Input
           placeholder="Filter tags..."
           value={(table.getColumn("tags")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
@@ -69,6 +72,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+
       </div>
       <div className="rounded-md border">
         <Table>
@@ -99,11 +103,30 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+                    {cell.column.id !== "actions" &&
+                    cell.column.id !== "select" ? (
+                      <Dialog>
+                        <DialogTrigger>
+                          <div>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent className="overflow-y-auto">
+                          <ViewDetailsDialog task={row.original} />
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <div>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
+                    )}
+                  </TableCell>
                   ))}
                 </TableRow>
               ))
@@ -120,7 +143,6 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      
     </div>
   )
 }

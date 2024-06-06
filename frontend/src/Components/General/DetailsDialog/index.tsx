@@ -19,10 +19,10 @@ const DetailsDialog = ({ trigger, task }: DetailsDialogProps) => {
     <Dialog>
       <DialogTrigger>{trigger}</DialogTrigger>
       <DialogContent>
-        <DialogHeader>
+        
           <DialogTitle>{task.title}</DialogTitle>
           <DialogDescription>{task.description}</DialogDescription>
-        </DialogHeader>
+        
       </DialogContent>
     </Dialog>
   );

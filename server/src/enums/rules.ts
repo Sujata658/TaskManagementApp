@@ -4,10 +4,10 @@ type Rules = {
 
 
 export const Rules: Rules = {
-    "ToDo" : [],
-    "InProgress" : [],
-    "Completed" : []
-    // "ToDo" : ['InProgress', 'Completed'],
-    // "InProgress" : ['ToDo', 'Completed'],
-    // "Completed" : ['InProgress']
+    // "ToDo" : [],
+    // "InProgress" : [],
+    // "Completed" : []
+    "ToDo" : ['InProgress', 'Completed'],
+    "InProgress" : ['ToDo', 'Completed'],
+    "Completed" : ['InProgress']
 }

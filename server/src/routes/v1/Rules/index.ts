@@ -5,11 +5,11 @@ import RuleController from "./controller";
 const RuleRouter = Router();
 
 // Get rules
-RuleRouter.route('/:id/rules').get(requireUser, RuleController.getRules);
+RuleRouter.route('/').get(requireUser, RuleController.getRules);
 
 
 // Update rules
-RuleRouter.route('/:id/rules').patch(requireUser, RuleController.updateRules);
+RuleRouter.route('/').patch(requireUser, RuleController.updateRules);
 
 
 export default RuleRouter;

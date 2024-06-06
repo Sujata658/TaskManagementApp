@@ -62,8 +62,10 @@ const TaskService = {
     async checkRule(from: string, to: string) {
         if (Rules[from] && Rules[from].includes(to)) {
             return true;
+        }else{
+
+            return false;
         }
-        return false;
     },
 
     

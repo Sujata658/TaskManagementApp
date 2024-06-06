@@ -7,7 +7,7 @@ import InputValidation from 'utils/InputValidation'
 
 const RuleController = {
 
-    async getRules(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+    async getRules(req: Request, res: Response, next: NextFunction) {
         try {
             const authorId = res.locals.user as { _id: string }
 

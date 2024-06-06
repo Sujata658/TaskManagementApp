@@ -8,6 +8,7 @@ import { LiaBorderAllSolid } from "react-icons/lia";
 import { MdOutlineAutoAwesomeMotion } from "react-icons/md";
 import { RiProgress5Line } from "react-icons/ri";
 import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
 
 import { IconType } from "react-icons/lib";
 
@@ -44,6 +45,12 @@ export const homeLinks: HomeLink[] = [
         title: 'List',
         icon: IoListOutline,
         path: '/list',
+    },
+    {
+        id: '4',
+        title: 'Settings',
+        icon: IoSettingsOutline,
+        path: '/settings',
     },
     // {
     //     id: '4',

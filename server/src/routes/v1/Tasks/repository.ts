@@ -44,7 +44,7 @@ export const getTasks = (authorId: string) => {
       createdAt: 1
     }).populate({
       path: 'author',
-      select: 'name -_id',
+      select: '_id name',
       options: { lean: true }
     }).populate({ path: 'tags', select: 'name' })
     .populate({ path: 'assignees', select: 'name email' })
@@ -101,7 +101,7 @@ export const getToDoTasks = (authorId: string, status: string) => {
       createdAt: 1
     }).populate({
       path: 'author',
-      select: 'name -_id',
+      select: 'name _id',
       options: { lean: true }
     }).populate({ path: 'tags', select: 'name' })
     .populate({ path: 'assignees', select: 'name email' })

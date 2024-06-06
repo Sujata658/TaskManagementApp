@@ -6,6 +6,7 @@ import moment from "moment"
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 
+
 const filterTags: FilterFn<any> = (row, columnId, filterValue) => {
   const tags: Tag[] = row.original.tags as Tag[];
   const res = tags.some((tag) => tag.name.includes(filterValue));
@@ -15,7 +16,6 @@ const filterTags: FilterFn<any> = (row, columnId, filterValue) => {
   return false;
 
 }
-
 export const columns: ColumnDef<Task>[] = [
   {
     id: "select",
@@ -44,14 +44,14 @@ export const columns: ColumnDef<Task>[] = [
     header: ({ column }) => {
       return (
         <>
-        Title
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          
-          <ArrowUpDown className="h-4 w-4" />
-        </Button>
+          Title
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
         </>
       )
     },
@@ -69,7 +69,7 @@ export const columns: ColumnDef<Task>[] = [
       const now = moment();
       const hoursLeft = dueDate.diff(now, 'hours');
       const daysLeft = dueDate.diff(now, 'days');
-      
+
       let timeLeft;
       if (hoursLeft <= 0) {
         timeLeft = "Overdue";
@@ -81,7 +81,7 @@ export const columns: ColumnDef<Task>[] = [
       else {
         timeLeft = `${daysLeft} days left`;
       }
-  
+
       return (
         <div>
           {timeLeft}
@@ -93,10 +93,17 @@ export const columns: ColumnDef<Task>[] = [
     accessorKey: "priority",
     header: "Priority",
   },
-  
+
   {
-    accessorKey: "author.name",
+    accessorKey: "author",
     header: "Created By",
+    cell: (props: CellContext<Task, unknown>) => {
+      return (
+        <div>
+          {props.cell.row.original.author.name}
+        </div>
+      );
+    }
   },
   {
     accessorKey: "assignees",
@@ -109,7 +116,7 @@ export const columns: ColumnDef<Task>[] = [
           {assignees && assignees.map((assignee: Assignee, index: number) => (
             <div
               key={index}
-              className="rounded-full bg-blue-500 text-white py-1 px-3 text-sm"
+              className="rounded-full bg-blue-500 text-white py-1 px-2 text-xs"
             >
               {assignee.name}
             </div>
@@ -137,4 +144,5 @@ export const columns: ColumnDef<Task>[] = [
     },
     filterFn: filterTags,
   }
+
 ];

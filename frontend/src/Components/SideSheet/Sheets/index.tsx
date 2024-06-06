@@ -2,6 +2,7 @@ import Links from "../Links"
 import logo from '../../../assets/undraw_donut_love_kau1.svg'
 import CreateTaskCard from "../CreateTask"
 import Profile from "../Profile"
+import { Card } from "@/components/ui/card"
 
 const HomeSheet = () => {
   return (
@@ -26,10 +27,10 @@ const HomeSheet = () => {
 
         </div>
 
-        <div className="w-full">
+        <Card className="w-full shadow-md rounded-xl">
 
           <Links />
-        </div>
+        </Card>
 
 
         <div>

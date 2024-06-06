@@ -69,7 +69,7 @@ const Protected = () => {
                 <HomeSheet />
             </div>
             <div className='col-span-4' >
-                <div >
+                <div>
 
                     <GreetNav />
                 </div>

@@ -137,10 +137,7 @@ const TasksController = {
 
             InputValidation.validateid(id)
 
-            
-
-            if(!TaskService.checkRule(from, to))
-                throw new Error("Changing status from " + from + " to " + to + " is not allowed")
+            if(await TaskService.checkRule(from, to) === false) throw new Error(messages.task.edit_forbidden)
 
             const result = await TaskService.updateTaskStatus(id, author._id, to)
 

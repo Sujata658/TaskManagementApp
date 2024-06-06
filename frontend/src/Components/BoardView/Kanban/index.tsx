@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Task } from "@/types/Task";
 import { arrayMove } from "@dnd-kit/sortable";
 import { changeStatus } from "@/apis/tasks/changeStatus";
+import { Toaster, toast } from "sonner";
 
 const Kanban = () => {
     const { ToDOtasks, InProgresstasks, Completedtasks } = useStatus();
@@ -80,8 +81,10 @@ const Kanban = () => {
 
                     return updatedColumns;
                 });
+
+                toast.success("Task status changed successfully.");
             } catch (error) {
-                console.error("Failed to update task status", error);
+                toast.error("Failed to change status. Please check settings and try again.");
             }
         }
 
@@ -94,7 +97,7 @@ const Kanban = () => {
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
-            <div className="flex">
+            <div className="grid grid-cols-3 m-8 mt-12 gap-4">
                 {columns.map(column => (
                     <KanbanColumn key={column.id} column={column} />
                 ))}
@@ -107,6 +110,7 @@ const Kanban = () => {
                     </Card>
                 )}
             </DragOverlay>
+            <Toaster />
         </DndContext>
     );
 };

@@ -8,7 +8,7 @@ import Activities from './Pages/Activities'
 import BoardView from './Pages/BoardView'
 import ListView from './Pages/ListView'
 import Protected from './Components/Protected'
-
+import Settings from './Pages/Settings'
 
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
                     <Route path="/activities" element={<Activities />} />
                     <Route path="/board" element={<BoardView />} />
                     <Route path="/list" element={<ListView />} />
+                    <Route path='/settings' element={<Settings/>} />
 
                     <Route path='*' element={<div>404</div>} />
                   </Route>

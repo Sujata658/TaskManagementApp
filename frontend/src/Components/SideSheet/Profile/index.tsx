@@ -34,7 +34,7 @@ const Profile = () => {
     };
 
     return (
-        <div className="flex items-center justify-between gap-2 border  p-3 rounded-xl ">
+        <div className="flex items-center justify-between gap-2 border  p-3 rounded-xl shadow-md">
             <div className="flex items-center">
                 <Avatar className="h-10 p-3 mr-2 rounded-full border border-foreground bg-secondary">
                     <AvatarFallback>
