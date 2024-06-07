@@ -42,7 +42,7 @@ const TaskService = {
             throw new CustomError(messages.task.delete_forbidden, 403);
         }
 
-        return result;
+        return {result,task};
     },
 
     async getToDoTasks(authorId: string, status: string) {

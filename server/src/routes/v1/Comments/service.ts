@@ -66,6 +66,6 @@ export const CommentsService = {
 
     if (!result) throw new CustomError(messages.comment.delete_forbidden, 403);
     
-    return true
+    return {comment}
   },
 };

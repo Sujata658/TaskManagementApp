@@ -10,7 +10,7 @@ import { updateTask } from "@/apis/tasks/updateTask";
 import { Task, TaskProps } from "@/types/Task";
 import { useTask } from "@/context/TaskContext";
 import TagProvider, { useTag } from "@/context/TagContext";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { useStatus } from "@/context/StatusContext";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -177,9 +177,7 @@ const EditTask: React.FC<EditTaskProps> = ({ task }) => {
 
             <Button type="submit" className="w-full bg-primary text-white py-2 px-4 rounded-md">Update Task</Button>
           </form>
-          <Toaster />
         </div>
-        {/* </ScrollArea> */}
         
       </SheetContent>
     </Sheet>

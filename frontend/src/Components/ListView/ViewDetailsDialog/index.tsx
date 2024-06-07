@@ -11,7 +11,6 @@ import { deleteTask } from "@/apis/tasks/deleteTask";
 import { toast } from "sonner";
 import { useStatus } from "@/context/StatusContext";
 import { useTask } from "@/context/TaskContext";
-import { Toaster } from "@/components/ui/sonner";
 
 interface ViewDetailsDialogProps {
     task: Task;
@@ -171,8 +170,6 @@ const ViewDetailsDialog: React.FC<ViewDetailsDialogProps> = ({ task }) => {
                     </Button>
                 )}
             </DialogFooter>
-
-            <Toaster />
         </div>
     );
 };

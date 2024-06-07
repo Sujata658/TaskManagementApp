@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const baseURL = "https://probable-guacamole-w4vqv94r9j3gj76-5000.app.github.dev/api/v1"
+// const baseURL = "https://probable-guacamole-w4vqv94r9j3gj76-5000.app.github.dev/api/v1"
 
-// const baseURL = "http://localhost:5000/api/v1"
+const baseURL = "http://localhost:5000/api/v1"
 
 export const axiosInstance = axios.create({
     baseURL: baseURL,

@@ -18,12 +18,14 @@ const CommentsController = {
       const result = await CommentsService.createComment(body, taskId, userId);
       if (!result) throw new Error(messages.comment.creation_failed);
 
-      return successResponse({
+      res.locals.actionOn = result;
+
+      next(successResponse({
         response: res,
         message: messages.comment.creation_success,
         data: result,
         status: 201,
-      });
+      }));
     } catch (error) {
       next(errorHandler(res, error))
     }
@@ -38,12 +40,14 @@ const CommentsController = {
       const userId = res.locals.user._id as string;
 
       const result = await CommentsService.updateComment(id,taskId, data, userId) 
-      return successResponse({
+
+      res.locals.actionOn = result;
+      next(successResponse({
         response: res,
         message: messages.comment.edit_success,
         data: result,
         status: 200
-      })
+      }))
 
 
     } catch (error) {
@@ -56,12 +60,13 @@ const CommentsController = {
       const {taskId, id} = req.params
       const userId = res.locals.user._id as string;
 
-      await CommentsService.deleteComment(id,taskId, userId) 
-      return successResponse({
+      const {comment} = await CommentsService.deleteComment(id,taskId, userId) 
+      res.locals.actionOn = comment;
+      next(successResponse({
         response: res,
         message: messages.comment.delete_success,
         status: 200
-      })
+      }))
 
 
     } catch (error) {

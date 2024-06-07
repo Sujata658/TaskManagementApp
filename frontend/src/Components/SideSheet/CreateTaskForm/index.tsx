@@ -11,7 +11,7 @@ import { createTask } from "@/apis/tasks/createTask";
 import { TaskProps } from "@/types/Task";
 import { useTask } from "@/context/TaskContext";
 import TagProvider, { useTag } from "@/context/TagContext";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { useStatus } from "@/context/StatusContext";
 
@@ -170,7 +170,6 @@ const CreateTaskForm: React.FC = () => {
 
         <Button type="submit" className="w-full bg-primary text-white py-2 px-4 rounded-md">Add Task</Button>
       </form>
-      <Toaster />
     </div>
   );
 };

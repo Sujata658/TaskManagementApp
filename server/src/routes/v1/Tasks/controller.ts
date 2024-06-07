@@ -25,12 +25,14 @@ const TasksController = {
             InputValidation.validateid(author._id);
             InputValidation.validateTask(task);
 
-            await TaskService.createTask(task, author._id, tags);
-            return successResponse({
+            const actask = await TaskService.createTask(task, author._id, tags);
+
+            res.locals.actionOn = actask;
+            next(successResponse({
                 response: res,
                 message: messages.task.creation_success,
                 status: 200
-            });
+            }))
         } catch (error) {
             next(errorHandler(res, error));
         }
@@ -79,12 +81,14 @@ const TasksController = {
 
             const result = await TaskService.updateTask(id, author._id, data, tags)
 
-            return successResponse({
+            res.locals.actionOn = result;
+
+            next(successResponse({
                 response: res,
                 message: messages.task.edit_success,
                 data: result,
                 status: 200,
-            });
+            }))
 
         } catch (error) {
             next(errorHandler(res, error))
@@ -97,13 +101,15 @@ const TasksController = {
 
             const author = res.locals.user as { _id: string }
 
-            await TaskService.deleteTask(id, author._id)
+            const {task} = await TaskService.deleteTask(id, author._id)
 
-            return successResponse({
+            res.locals.actionOn = task;
+
+            next(successResponse({
                 response: res,
                 message: messages.task.delete_success,
                 status: 200,
-            });
+            }))
         } catch (error) {
             next(errorHandler(res, error))
         }
@@ -141,12 +147,14 @@ const TasksController = {
 
             const result = await TaskService.updateTaskStatus(id, author._id, to)
 
-            return successResponse({
+            res.locals.actionOn = result;
+
+            next(successResponse({
                 response: res,
                 message: messages.task.edit_success,
                 data: result,
                 status: 200,
-            });
+            }));
 
         } catch (error) {
             next(errorHandler(res, error))

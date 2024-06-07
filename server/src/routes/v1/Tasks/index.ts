@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import TasksController from './controller';
 import { requireUser } from '../../../middleware/requireUser';
+import { logActivity } from '../../../middleware/activityLogs';
+import { Activities } from '../../../enums/activities';
 
  
 
@@ -17,16 +19,16 @@ TaskRouter.route('/:status').get(requireUser, TasksController.getToDoTasks);
 TaskRouter.route('/:id').get(requireUser, TasksController.getTask);
 
 // Create new task
-TaskRouter.route('/').post( requireUser,TasksController.createTask);
+TaskRouter.route('/').post( requireUser,TasksController.createTask, logActivity(Activities.Create, 'Task'));
 
 // Update a task
-TaskRouter.route('/:id').patch(requireUser, TasksController.updateTask);
+TaskRouter.route('/:id').patch(requireUser, TasksController.updateTask, logActivity(Activities.Update, 'Task'));
 
 // Delete a task
-TaskRouter.route('/:id').delete(requireUser, TasksController.deleteTask);
+TaskRouter.route('/:id').delete(requireUser, TasksController.deleteTask, logActivity(Activities.Delete, 'Task'));
 
 //Update task status
-TaskRouter.route('/:id/:from/:to').patch(requireUser, TasksController.updateTaskStatus);
+TaskRouter.route('/:id/:from/:to').patch(requireUser, TasksController.updateTaskStatus, logActivity(Activities.UpdateTaskStatus, 'Task'));
 
 
 

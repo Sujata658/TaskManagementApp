@@ -1,6 +1,6 @@
 export enum Activities {
-    Create = 'Create',
-    Update = 'Update',
-    Delete = 'Delete',
-    Assigned = 'Assigned',
+    Create = 'Created',
+    Update = 'Updated',
+    Delete = 'Deleted',
+    UpdateTaskStatus = 'Updated task status of',
 }
