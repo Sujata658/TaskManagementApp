@@ -114,7 +114,7 @@ export function DataTable<TData extends Task, TValue>({
                             )}
                           </div>
                         </DialogTrigger>
-                        <DialogContent className="overflow-y-auto">
+                        <DialogContent className="overflow-y-auto max-w-[60vw]">
                           <ViewDetailsDialog task={row.original} />
                         </DialogContent>
                       </Dialog>

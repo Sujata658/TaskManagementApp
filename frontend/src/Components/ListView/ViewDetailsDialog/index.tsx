@@ -11,6 +11,7 @@ import { deleteTask } from "@/apis/tasks/deleteTask";
 import { toast } from "sonner";
 import { useStatus } from "@/context/StatusContext";
 import { useTask } from "@/context/TaskContext";
+import DescriptionCommentTabs from "../DescriptionCommentTab";
 
 interface ViewDetailsDialogProps {
     task: Task;
@@ -39,11 +40,10 @@ const ViewDetailsDialog: React.FC<ViewDetailsDialogProps> = ({ task }) => {
     const { refreshStatus } = useStatus();
 
 
+
     const handleDelete = async () => {
         try {
             const response = await deleteTask(task._id);
-
-            console.log('response:', response)
 
             if (response) {
                 refreshTasks();
@@ -56,6 +56,7 @@ const ViewDetailsDialog: React.FC<ViewDetailsDialogProps> = ({ task }) => {
             toast.error("Failed to delete task");
         }
     };
+
 
 
     return (
@@ -96,38 +97,40 @@ const ViewDetailsDialog: React.FC<ViewDetailsDialogProps> = ({ task }) => {
                 <div className="flex justify-between items-center my-4">
                     <div className="flex items-center gap-4 flex-wrap">
                         <div className="text-lg font-bold">Tags:</div>
-                        {task.tags.map((tag, index) => (
-                            <span
-                                key={index}
-                                className="px-2 py-1 bg-muted border border-muted-foreground text-muted-foreground rounded-full"
-                            >
-                                {tag.name}
-                            </span>
-                        ))}
+                        {task.tags.length > 0 ? (
+                            task.tags.map((tag, index) => (
+                                <span
+                                    key={index}
+                                    className="px-2 py-1 bg-muted border border-muted-foreground text-muted-foreground rounded-full"
+                                >
+                                    {tag.name}
+                                </span>
+                            ))
+                        ) : (
+                            <span className="text-muted-foreground">None</span>
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-wrap mb-4">
                     <div className="flex flex-wrap gap-4 items-center w-full md:w-1/2">
                         <div className="text-lg font-bold">Assignees:</div>
                         <ul className="flex gap-2 flex-wrap">
-                            {task.assignees.map((assignee, index) => (
-                                <li key={index}>
-                                    <span className="text-yellow-600 list-disc list-inside bg-muted px-3 py-1 border border-muted-foreground rounded-full">
-                                        {assignee.name}
-                                    </span>
-                                </li>
-                            ))}
+                            {task.assignees.length > 0 ? (
+                                task.assignees.map((assignee, index) => (
+                                    <li key={index}>
+                                        <span className="text-yellow-600 list-disc list-inside bg-muted px-3 py-1 border border-muted-foreground rounded-full">
+                                            {assignee.name}
+                                        </span>
+                                    </li>
+                                ))
+                            ) : (
+                                <span className="text-muted-foreground">None</span>
+                            )}
                         </ul>
                     </div>
                 </div>
-                <div>
-                    <div className="text-lg font-bold">Description:</div>
-                    <p className="h-[60px] py-2 px-1 bg-muted rounded-sm">
-                        {(
-                            task.description
-                        )}
-                    </p>
-                </div>
+
+                <DescriptionCommentTabs task={task} />
             </DialogDescription>
             <DialogFooter>
                 {user?._id === task.author._id ? (
@@ -136,7 +139,8 @@ const ViewDetailsDialog: React.FC<ViewDetailsDialogProps> = ({ task }) => {
                     </Button>
                 ) : (
                     <Button variant="secondary" disabled className="mb-4">
-                        Edit
+                       <p>Edit
+                        </p> 
                     </Button>
                 )}
                 {user?._id === task.author._id ? (
@@ -144,7 +148,7 @@ const ViewDetailsDialog: React.FC<ViewDetailsDialogProps> = ({ task }) => {
                         <AlertDialogTrigger>
                             <Button variant="destructive" className="mb-4">
                                 <IoTrashBin className="mr-2" />
-                                Delete
+                                <p>Delete</p>
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -159,14 +163,14 @@ const ViewDetailsDialog: React.FC<ViewDetailsDialogProps> = ({ task }) => {
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <DialogClose asChild>
 
-                                <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+                                    <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
                                 </DialogClose>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
                 ) : (
                     <Button variant="destructive" disabled className="mb-4">
-                        Delete
+                      <p>Delete</p>  
                     </Button>
                 )}
             </DialogFooter>

@@ -7,12 +7,12 @@ const CommentsRouter = Router({mergeParams: true});
 
 
 // Create a Comment
-CommentsRouter.route('/').post(requireUser, CommentsController.createComment, logActivity('create', 'Comment'));
+CommentsRouter.route('/').post(requireUser, CommentsController.createComment, logActivity('create', 'comment'));
 
 // Edit a Comment
-CommentsRouter.route('/:id').patch(requireUser,CommentsController.updateComment, logActivity('update', 'Comment'));
+CommentsRouter.route('/:id').patch(requireUser,CommentsController.updateComment, logActivity('update', 'comment'));
 
 // Delete a Comment
-CommentsRouter.route('/:id').delete(requireUser, CommentsController.deleteComment, logActivity('delete', 'Comment'));
+CommentsRouter.route('/:id').delete(requireUser, CommentsController.deleteComment, logActivity('delete', 'comment'));
 
 export default CommentsRouter;

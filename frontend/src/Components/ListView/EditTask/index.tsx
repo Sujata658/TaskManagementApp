@@ -104,7 +104,7 @@ const EditTask: React.FC<EditTaskProps> = ({ task }) => {
       <SheetTrigger asChild>
         <Button variant="secondary">
           <IoPencil className="mr-2" />
-          Edit
+          <p>Edit</p>
         </Button>
       </SheetTrigger>
       <SheetContent className="overflow-y-auto">
@@ -175,7 +175,7 @@ const EditTask: React.FC<EditTaskProps> = ({ task }) => {
               {errors.description && <span className="text-red-600 text-sm">{errors.description.message}</span>}
             </div>
 
-            <Button type="submit" className="w-full bg-primary text-white py-2 px-4 rounded-md">Update Task</Button>
+            <Button type="submit" className="w-full bg-primary text-background py-2 px-4 rounded-md"><p>Update Task</p></Button>
           </form>
         </div>
         

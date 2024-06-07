@@ -93,9 +93,7 @@ const CreateTaskForm: React.FC = () => {
           description: "",
           dueDate: getDefaultDate(),
           tags: [],
-          assignees: [],
-          priority: "",
-          status: ""
+          assignees: []
         });
         setSelectedTags([]);
         setSelectedAssignees([]);

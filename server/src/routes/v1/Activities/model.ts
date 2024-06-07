@@ -4,7 +4,7 @@ export interface Activity extends Document {
   action: string;
   author: Types.ObjectId;
   actionOn: Types.ObjectId;
-  actionOnModel: 'Task' | 'Comment';
+  actionOnModel: 'Task' | 'comment';
   details?: string;
   from?: string;
   to?: string;
@@ -29,7 +29,7 @@ const ActivitySchema = new Schema<Activity>(
     actionOnModel: {
       type: String,
       required: true,
-      enum: ['Task', 'Comment'],
+      enum: ['Task', 'comment'],
     },
     details: {
       type: String,

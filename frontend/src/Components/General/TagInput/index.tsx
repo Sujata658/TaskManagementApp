@@ -58,7 +58,7 @@ const TagInput: React.FC<TagInputProps> = ({
 
   useEffect(() => {
     if (existingTags.length > 0) {
-      console.log('reached existingTags:', existingTags)
+      // console.log('reached existingTags:', existingTags)
       const existingTagNames = existingTags.map((tag) => tag?.name).filter(Boolean); 
       setSelectedTags(existingTagNames as string[]); 
     }

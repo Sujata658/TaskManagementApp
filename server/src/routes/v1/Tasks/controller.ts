@@ -45,6 +45,7 @@ const TasksController = {
             InputValidation.validateid(id)
             InputValidation.validateid(authorId._id)
 
+
             const result = await TaskService.getTask(id, authorId._id)
 
             return successResponse({

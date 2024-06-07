@@ -16,7 +16,7 @@ TaskRouter.route('/').get(requireUser, TasksController.getTasks);
 TaskRouter.route('/:status').get(requireUser, TasksController.getToDoTasks);
 
 // Get one task
-TaskRouter.route('/:id').get(requireUser, TasksController.getTask);
+TaskRouter.route('/one/:id').get(requireUser, TasksController.getTask);
 
 // Create new task
 TaskRouter.route('/').post( requireUser,TasksController.createTask, logActivity(Activities.Create, 'Task'));

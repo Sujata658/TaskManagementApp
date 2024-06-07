@@ -7,15 +7,9 @@ export const createComment = async (taskId: string,commentId:string, commentProp
   try {
     console.log('createTask api....');
     const response = await axiosInstance.post(`/tasks/${taskId}/comments/${commentId}`, commentProps);
+    console.log('response:', response)
     return response.data as Response<Task>;
   } catch (error) {
     throw error;
   }
 };
-
-
-
-
-
-
-

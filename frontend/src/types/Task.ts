@@ -53,6 +53,6 @@ export interface Task {
   export interface Comment {
     _id: string
     content: string
-    author: string
+    author: Partial<User>
     createdAt: string
   }

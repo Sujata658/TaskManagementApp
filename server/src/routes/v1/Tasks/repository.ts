@@ -17,7 +17,15 @@ export const getTask = (id: string, authorId: string): Promise<Task | null> => {
   })
     .populate({ path: 'assignees', select: 'name email' })
 
-    .populate({ path: 'comments', select: 'content author createdAt' })
+    .populate({
+      path: 'comments',
+      select: 'content author createdAt',
+      populate: {
+        path: 'author',
+        select: '_id name',
+        options: { lean: true }
+      }
+    })
     .lean()
     .exec()
     .then((task: Task | null) => {
@@ -25,7 +33,7 @@ export const getTask = (id: string, authorId: string): Promise<Task | null> => {
 
       }
       return task;
-    });
+    })
 }
 
 
@@ -48,10 +56,17 @@ export const getTasks = (authorId: string) => {
       options: { lean: true }
     }).populate({ path: 'tags', select: 'name' })
     .populate({ path: 'assignees', select: 'name email' })
-    .populate({ path: 'comments', select: 'content author createdAt' })
-    
-    ;
+    .populate({
+      path: 'comments',
+      select: 'content author createdAt',
+      populate: {
+        path: 'author',
+        select: '_id name',
+        options: { lean: true }
+      }
+    });
 }
+
 
 
 export const updateTask = async (id: string, userId: string, data: Partial<Task>, tags: string[] | undefined): Promise<Task | null> => {
@@ -106,7 +121,15 @@ export const getToDoTasks = (authorId: string, status: string) => {
       options: { lean: true }
     }).populate({ path: 'tags', select: 'name' })
     .populate({ path: 'assignees', select: 'name email' })
-    .populate({ path: 'comments', select: 'content author createdAt' })
+    .populate({
+      path: 'comments',
+      select: 'content author createdAt',
+      populate: {
+        path: 'author',
+        select: '_id name',
+        options: { lean: true }
+      }
+    })
     ;
 }
 
